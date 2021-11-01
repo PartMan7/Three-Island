@@ -1,6 +1,6 @@
 # Three Island
 
-Three Island is a script/extension for Pokémon Showdown on various browsers that allows for a seamless PokéPaste experience.
+Three Island is a script/extension for Pokemon Showdown on various browsers that allows for a seamless PokéPaste experience.
 
 It is currently a script that may be run on various browsers through Greasemonkey (on Firefox) or Tampermonkey (on Google Chrome, Microsoft Edge, Safari, and Opera Next). The final goal of Three Island is to have a working extension for Firefox and Chrome; work on this has begun!
 
@@ -35,7 +35,7 @@ Three Island should now be running. If you wish to disable it, click the Tamperm
 
 ## Known Issues
 * Teams in the chatlogs of rooms that are joined in real-time don't have their previews loaded (fix in the works)
-* The preview doesn't work in battlerooms (also in progress)
+* The preview doesn't work in battlerooms and PMs (also in progress)
 * The extension doesn't exist yet (working on this too)
 * The hover is in dark mode (light mode is bad) (is this even an issue?)
 
