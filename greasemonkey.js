@@ -9,12 +9,45 @@
 // @match    https://*.psim.us/*
 // ==/UserScript==
 
-const app = unsafeWindow.app;
-const Storage = unsafeWindow.Storage;
 
-const storedPastes = {};
+const WINDOW = unsafeWindow;
+
+const { app, Dex, Storage } = WINDOW; // Importing PS functions
+const storedPastes = {}; // Storing the data that we get from the Paste so we can display it
+
+function escapeHTML (str) {
+	// Escapes HTML
+	if (!str) return '';
+	return ('' + str)
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&apos;')
+		.replace(/\//g, '&#x2f;');
+}
+
+function deepClone (aObject) {
+	if (!aObject) return aObject;
+
+	let v, bObject = Array.isArray(aObject) ? (new WINDOW.Array()) : (new WINDOW.Object());
+	for (const k in aObject) {
+		v = aObject[k];
+		bObject[k] = (typeof v === "object") ? deepClone(v) : v;
+	}
+
+	return bObject;
+}
+
+function monString (mon) {
+	mon = deepClone(mon);
+	const arr = new WINDOW.Array();
+	arr.push(mon);
+	return `<div style="position:relative;height:32px;width:40px;display:inline-block" class="threeisland-set"><span class="picon" style="${Dex.getPokemonIcon(mon.species)};position:absolute;top:0;left:0"></span><span class="itemicon" style="${Dex.getItemIcon(mon.item)};transform:scale(0.8);position:absolute;top:15px;left:15px"></span><span class="threeisland-tooltip"><pre>${escapeHTML(Storage.exportTeam(arr))}</pre></span></div>`; // HTML-ification!
+}
 
 function fetchPaste (url) {
+	// Gets and stores the data from Pastes that are posted
 	return new Promise((resolve, reject) => {
 		if (!url) return reject(new Error('No URL'));
 		const paste = url.match(/pokepast\.es\/([a-zA-Z0-9]+)/);
@@ -25,16 +58,22 @@ function fetchPaste (url) {
 		fetch(jsonLink).then(res => res.json()).then(data => {
 			const team = Storage.importTeam(data.paste);
 			const teamString = Storage.packTeam(team);
-			const iconCache = Storage.packedTeamIcons(teamString);
-			storedPastes[paste[1]] = { teamString, iconCache, title: data.title };
+			let floatHTML = '';
+			for (let i = 0; i < team.length; i++) floatHTML += monString(team[i]); // Access denied if we try to run Array#map
+			let format = 'gen8';
+			const matched = data.notes.match(/[Ff]ormat *(?:[:-] *)?([a-z0-9]+)/);
+			if (matched) format = matched[1];
+			if (!format.startsWith('gen')) format = 'gen8' + format;
+			storedPastes[paste[1]] = { teamString, title: data.title, floatHTML: floatHTML || iconCache, team, format };
 			resolve(paste[1]);
-		}).catch(err => {
+		}).catch(() => {
 			reject(new Error('Paste link is invalid.'));
 		});
 	});
 }
 
 function addTeam (url) {
+	// Adds the team to the storage + teambuilder
 	return new Promise((resolve, reject) => {
 		if (!url) return reject(new Error('No URL'));
 		const paste = url.match(/pokepast\.es\/([a-zA-Z0-9]+)/);
@@ -43,13 +82,13 @@ function addTeam (url) {
 		if (storedPastes[paste[1]]) return resolve(storedPastes[paste[1]]);
 		else return fetchPaste(url).then(data => resolve(storedPastes[data]));
 	}).catch(console.error).then(data => {
-		const newTeam = new unsafeWindow.Object();
+		const newTeam = new WINDOW.Object();
 		newTeam.name = data.title;
-		newTeam.format = 'gen8';
+		newTeam.format = data.format;
 		newTeam.team = data.teamString;
-		newTeam.capacity = 6;
+		newTeam.capacity = data.team.length > 6 ? 24 : 6;
 		newTeam.folder = '';
-		newTeam.iconCache = data.iconCache;
+		newTeam.iconCache = Storage.packedTeamIcons(data.teamString);;
 		Storage.teams.unshift(newTeam);
 		if (app.rooms.teambuilder) app.rooms.teambuilder.update();
 		Storage.saveTeams();
@@ -71,6 +110,7 @@ function validRoom (room) {
 }
 
 function runCheck (ftd, pm) {
+	// format chat messages with valid PokePaste links
 	if (!ftd) return;
 	if (ftd.nodeName !== 'A') return;
 	if (/^(?:https?:\/\/)?pokepast\.es\/[a-zA-Z0-9]+$/.test(ftd.href)) {
@@ -79,13 +119,23 @@ function runCheck (ftd, pm) {
 			const data = storedPastes[ref];
 			const tooltip = document.createElement('span');
 			if (pm) tooltip.classList.add('threeisland-pm');
-			const innerHTML = `<center class="threeisland-images">${data.iconCache}</center>`;
+			const innerHTML = `<center class="threeisland-images">${data.floatHTML}</center>`;
 			tooltip.innerHTML = innerHTML + (pm ? '' : '<br/>');
 			tooltip.classList.add('threeisland-tooltip');
 			const button = document.createElement('button');
 			button.addEventListener('click', e => {
 				addTeam(link);
-				if (e.target.nodeName === 'BUTTON') e.preventDefault();
+				if (e.target.nodeName === 'BUTTON') e.preventDefault(); // Don't redirect if they clicked the 'Import button'
+			});
+			tooltip.addEventListener('click', e => {
+				if (e.target.nodeName === 'PRE') {
+					// They clicked the set; we copy this to clipboard!
+					e.preventDefault();
+					const set = e.target.textContent;
+					WINDOW.navigator?.clipboard?.writeText(set)?.catch(() => {});
+					e.target.style['background-color'] = '#3d454e';
+					setTimeout(() => e.target.style['background-color'] = '#0d151e', 1100);
+				}
 			});
 			button.innerHTML = 'Import';
 			tooltip.appendChild(button);
@@ -97,6 +147,7 @@ function runCheck (ftd, pm) {
 }
 
 function watchRoom (node, spc) {
+	// Run the check function above on every messagebox that appears in chat
 	const observerW = new MutationObserver(mutations => {
 		mutations.forEach(mutation => {
 			for (const msg of mutation.addedNodes) {
@@ -133,6 +184,7 @@ function watchRoom (node, spc) {
 }
 
 Object.entries(app.rooms).forEach(([room, data]) => {
+	// Load all rooms on connecting
 	const val = validRoom(room);
 	if (!val) return;
 	const node = data.el;
@@ -141,6 +193,7 @@ Object.entries(app.rooms).forEach(([room, data]) => {
 });
 
 const observer = new MutationObserver(mutations => {
+	// Keep an eye out for rooms we're joining / leaving
 	mutations.forEach(mutation => {
 		for (const node of mutation.addedNodes) {
 			const roomRoom = node.id;
@@ -162,6 +215,7 @@ const observer = new MutationObserver(mutations => {
 observer.observe(document.querySelector('body'), { childList: true });
 
 const observerPM = new MutationObserver(mutations => {
+	// The above, but for users in your PMs instead
 	mutations.forEach(mutation => {
 		for (const node of mutation.addedNodes) {
 			const user = node.getAttribute('data-userid');
@@ -197,9 +251,8 @@ const observerPM = new MutationObserver(mutations => {
 });
 observerPM.observe(document.querySelector('.pmbox'), { childList: true });
 
-/* Adding CSS */
-
 function addCSS (css) {
+	// And finally we make it look pretty
 	let head, style;
 	head = document.getElementsByTagName('head')[0];
 	if (!head) return;
@@ -209,12 +262,92 @@ function addCSS (css) {
 	head.appendChild(style);
 }
 
-const vCSS = {
-	a: '250px',
-	b: '200px',
-	c: '150px'
-};
+const CSS = `.threeisland-link {
+	position: relative;
+	display: inline-block;
+	border-bottom: 1px dotted black;
+	background-color: rgba(100, 100, 200, 0.5);
+	padding: 0 5px;
+	border-radius: 3px;
+}
 
-addCSS(`.threeisland-link { position: relative; display: inline-block; border-bottom: 1px dotted black; background-color: rgba(100, 100, 200, 0.5); padding: 0 5px; border-radius: 3px;} .threeisland-link .threeisland-tooltip { visibility: hidden; background-color: #0d151e; color: #ddd; text-align: center; padding: 5px; border-radius: 6px; border: 1px solid #999; position: absolute; z-index: 1;  width: ${vCSS.a}; bottom: 100%; left: 50%; margin-left: -50%;} .threeisland-link:hover .threeisland-tooltip { visibility: visible;} .threeisland-images { width: ${vCSS.a}; min-width: ${vCSS.a}; max-width: ${vCSS.a}; min-height: 30px;} .threeisland-tooltip.threeisland-pm { min-width: ${vCSS.b}; max-width: ${vCSS.b}; width: ${vCSS.b}; display: flex;} .threeisland-tooltip.threeisland-pm > center { min-width: ${vCSS.c}; max-width: ${vCSS.c}; width: ${vCSS.c};} .threeisland-images > span { float: none !important;}`);
+.threeisland-link > .threeisland-tooltip {
+	visibility: hidden;
+	background-color: #0d151e;
+	color: #ddd;
+	text-align: center;
+	padding: 5px;
+	border-radius: 6px;
+	border: 1px solid #999;
+	position: absolute;
+	z-index: 1;
+	width: 250px;
+	bottom: 100%;
+	left: 50%;
+	margin-left: -50%;
+}
+
+.threeisland-link:hover > .threeisland-tooltip {
+	visibility: visible;
+}
+
+.threeisland-images {
+	width: 250px;
+	min-width: 250px;
+	max-width: 250px;
+	min-height: 30px;
+}
+
+.threeisland-tooltip.threeisland-pm {
+	min-width: 200px;
+	max-width: 200px;
+	width: 200px;
+	display: flex;
+}
+
+.threeisland-tooltip.threeisland-pm > center {
+	min-width: 150px;
+	max-width: 150px;
+	width: 150px;
+}
+
+.threeisland-images > span {
+	float: none !important;
+}
+
+
+.threeisland-set {
+	position: relative;
+	display: inline-block;
+}
+
+.threeisland-set > .threeisland-tooltip {
+	visibility: hidden;
+	background-color: #0d151e;
+	color: #ddd;
+	text-align: center;
+	padding: 5px 10px 5px;
+	border-radius: 6px;
+	border: 1px solid #999;
+	position: absolute;
+	z-index: 1;
+	width: 250px;
+	bottom: 100%;
+	left: 50%;
+	margin-left: -50%;
+}
+
+.threeisland-set:hover > .threeisland-tooltip {
+	visibility: visible;
+}
+
+.threeisland-tooltip > pre {
+	text-align: left;
+	white-space: pre-wrap;
+	overflow-y: scroll;
+	transition: background-color 500ms ease;
+}`;
+
+addCSS(CSS);
 
 /* End */
