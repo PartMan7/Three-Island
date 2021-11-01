@@ -7,7 +7,9 @@ It is currently a script that may be run on various browsers through Greasemonke
 ## Features
 * Simple, unobtrusive hoverable elements on all pokepast.es URLs
 * PokéPaste previews without actually opening the PokéPaste
-* Insta-import buttons that allow you to import a Pokepaste in one click
+* Set details on further hovering
+* Copy-with-a-click on set details
+* Insta-import buttons that allow you to import a Pokepaste to your teambuidler in one click
 
 ## Installation
 
@@ -26,12 +28,7 @@ Three Island should now be running. If you wish to disable it, click the Greasem
 Three Island should now be running. If you wish to disable it, click the Tampermonkey extension, and click the green slider next to `Three Island`. You may need to reload the page to undo changes to loaded PokéPastes.
 
 ## Planned Features
-* Individual set details being shown on hovering over the preview (hoverception :3)
-* Individual set importing
-* Usability in PMs and battle rooms
 * Automatic tier-guessing based on the Pokemon used (currently defaults to gen8 since no information is available)
-* Item sprites being added to previews
-* Box imports creating a new box instead of capping at 6
 * Being able to import multiple teams at the same time
 
 ## Known Issues
