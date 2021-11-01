@@ -1,6 +1,6 @@
 # Three Island
 
-Three Island is a script/extension for Pokemon Showdown on various browsers that allows for a seamless PokéPaste experience.
+Three Island is a script/extension for Pokémon Showdown on various browsers that allows for a seamless PokéPaste experience.
 
 It is currently a script that may be run on various browsers through Greasemonkey (on Firefox) or Tampermonkey (on Google Chrome, Microsoft Edge, Safari, and Opera Next). The final goal of Three Island is to have a working extension for Firefox and Chrome; work on this has begun!
 
