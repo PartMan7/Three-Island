@@ -28,15 +28,14 @@ Three Island should now be running. If you wish to disable it, click the Tamperm
 ## Planned Features
 * Individual set details being shown on hovering over the preview (hoverception :3)
 * Individual set importing
+* Usability in PMs and battle rooms
 * Automatic tier-guessing based on the Pokemon used (currently defaults to gen8 since no information is available)
 * Item sprites being added to previews
 * Box imports creating a new box instead of capping at 6
 * Being able to import multiple teams at the same time
 
 ## Known Issues
-* Teams in the chatlogs of rooms that are joined in real-time don't have their previews loaded (fix in the works)
-* The preview doesn't work in battlerooms and PMs (also in progress)
-* The extension doesn't exist yet (working on this too)
+* The extension doesn't exist yet (working on this)
 * The hover is in dark mode (light mode is bad) (is this even an issue?)
 
 For contributions, questions, or just a generic chat, message me on Discord at PartMan#7321 or contact me on [Smogon](https://www.smogon.com/forums/members/partman.470255/)/Showdown.
