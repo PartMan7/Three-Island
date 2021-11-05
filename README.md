@@ -19,11 +19,6 @@ The extension hasn't yet been published on the Add-on Store yet, but you can alr
 ### Chrome (and other browsers) Extension (preview)
 The extension hasn't yet been published on the Chrome Web Store yet, but you can test it out! Download the `chrome/three-island.zip` file to your device and unzip it. Then navigate to the `chrome://extensions` page (tested on Chrome and Opera), enable Developer mode (if disabled), and select `Load unpacked`. Here, select the unzipped directory (the `three-island` folder) - the extension should now be running!
 
-
-**Note**: While using Greasemonkey and Tampermonkey, please **do not** add scripts from sources you don't trust. These scripts have higher permissions than most browser tabs, and can cause significant damage if a malicious script is run. (Comments have been added explaining the code line-by-line if you're not sure about this script's validity.)
-
-**Note**: Since these are just scripts, they don't update themselves. If you have an older version of the script(s) and would like to update, just copy-paste the whole thing over the old code and save.
-
 ### Greasemonkey
 1. On Firefox, install the [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) extension.
 2. Once you've added it, click on the extension, click on `New User Script`, and paste in the `greasemonkey.js` file from this repository.
@@ -35,6 +30,11 @@ Three Island should now be running. If you wish to disable it, click the Greasem
 2. Once you've added it, click on the extension, click on `Create a new script...`, and paste in the `tampermonkey.js` file from this repository.
 3. Reload your Showdown tab.
 Three Island should now be running. If you wish to disable it, click the Tampermonkey extension, and click the green slider next to `Three Island`. You may need to reload the page to undo changes to loaded PokéPastes.
+
+
+**Note**: While using Greasemonkey and Tampermonkey, please **do not** add scripts from sources you don't trust. These scripts have higher permissions than most browser tabs, and can cause significant damage if a malicious script is run. (Comments have been added explaining the code line-by-line if you're not sure about this script's validity.)
+
+**Note**: Since these last two are just scripts, they don't update themselves. If you have an older version of the script(s) and would like to update, just copy-paste the whole thing over the old code and save.
 
 ## Planned Features
 * Automatic tier-guessing based on the Pokemon used (currently defaults to gen8 since no information is available)
