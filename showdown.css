@@ -1,0 +1,99 @@
+.threeisland-link {
+	position: relative;
+	display: inline-block;
+	border-bottom: 1px dotted black;
+	background-color: rgba(200, 200, 250, 0.5);
+	padding: 0 5px;
+	border-radius: 3px;
+}
+
+.dark .threeisland-link {
+	background-color: rgba(100, 100, 200, 0.5);
+}
+
+.threeisland-link > .threeisland-tooltip {
+	visibility: hidden;
+	background-color: #e1e8e8;
+	color: #fff;
+	text-align: center;
+	padding: 5px;
+	border-radius: 6px;
+	border: 1px solid #999;
+	position: absolute;
+	z-index: 1;
+	width: 250px;
+	bottom: 100%;
+	left: 50%;
+	margin-left: -50%;
+}
+
+.dark .threeisland-link > .threeisland-tooltip {
+	background-color: #0d151e;
+	color: #ddd;
+}
+
+.threeisland-link:hover > .threeisland-tooltip {
+	visibility: visible;
+}
+
+.threeisland-images {
+	width: 250px;
+	min-width: 250px;
+	max-width: 250px;
+	min-height: 30px;
+}
+
+.threeisland-tooltip.threeisland-pm {
+	min-width: 200px;
+	max-width: 200px;
+	width: 200px;
+	display: flex;
+}
+
+.threeisland-tooltip.threeisland-pm > center {
+	min-width: 150px;
+	max-width: 150px;
+	width: 150px;
+}
+
+.threeisland-images > span {
+	float: none !important;
+}
+
+
+.threeisland-set {
+	position: relative;
+	display: inline-block;
+}
+
+.threeisland-set > .threeisland-tooltip {
+	visibility: hidden;
+	background-color: #e1e8e8;
+	color: #000;
+	text-align: center;
+	padding: 5px 10px 5px;
+	border-radius: 6px;
+	border: 1px solid #999;
+	position: absolute;
+	z-index: 1;
+	width: 250px;
+	bottom: 100%;
+	left: 50%;
+	margin-left: -50%;
+}
+
+.dark .threeisland-set > .threeisland-tooltip {
+	background-color: #0d151e;
+	color: #ddd;
+}
+
+.threeisland-set:hover > .threeisland-tooltip {
+	visibility: visible;
+}
+
+.threeisland-tooltip > pre {
+	text-align: left;
+	white-space: pre-wrap;
+	overflow-y: scroll;
+	transition: background-color 500ms ease;
+}

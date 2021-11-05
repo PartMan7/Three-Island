@@ -13,7 +13,13 @@ It is currently a script that may be run on various browsers through Greasemonke
 
 ## Installation
 
+### Firefox Extension (preview)
+The extension hasn't yet been published on the Add-on Store yet, but you can already test it out! Download the `firefox/three-island.xpi` file to your device, open Firefox, visit the [Debugging page](about:debugging) (Firefox-only), click `This Firefox`, and hit `Load Temporary Add-on`. Here, select the XPI file you just downloaded, and voíla! The extension should be running in this session.
+
+
 **Note**: While using Greasemonkey and Tampermonkey, please **do not** add scripts from sources you don't trust. These scripts have higher permissions than most browser tabs, and can cause significant damage if a malicious script is run. (A file will be added soon explaining the code line-by-line if you're not sure about this script's validity.)
+
+**Note**: Since these are just scripts, they don't update themselves. If you have an older version of the script(s) and would like to update, just copy-paste the whole thing over the old code and save.
 
 ### Greasemonkey
 1. On Firefox, install the [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) extension.
@@ -31,8 +37,4 @@ Three Island should now be running. If you wish to disable it, click the Tamperm
 * Automatic tier-guessing based on the Pokemon used (currently defaults to gen8 since no information is available)
 * Being able to import multiple teams at the same time
 
-## Known Issues
-* The extension doesn't exist yet (working on this)
-* The hover is in dark mode (light mode is bad) (is this even an issue?)
-
-For contributions, questions, or just a generic chat, message me on Discord at PartMan#7321 or contact me on [Smogon](https://www.smogon.com/forums/members/partman.470255/)/Showdown.
+For contributions, suggestions, questions, or just generic discussion, message me on Discord at PartMan#7321 or contact me on [Smogon](https://www.smogon.com/forums/members/partman.470255/)/Showdown.

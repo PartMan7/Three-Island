@@ -1,0 +1,35 @@
+{
+	"manifest_version": 2,
+	"name": "Three Island",
+	"version": "1.0",
+	"description": "A Firefox extension for Pokemon Showdown that offers a seamless Poképaste experience.",
+	"homepage_url": "https://github.com/PartMan7/Three-Island",
+	"icons": {
+		"48": "icons/three-island-48.png",
+		"96": "icons/three-island-96.png",
+		"128": "icons/three-island-128.png"
+	},
+	"permissions": [
+		"storage",
+		"*://play.pokemonshowdown.com/*",
+		"*://*.psim.us/*",
+		"*://pokepast.es/**"
+	],
+	"browser_action": {
+		"default_icon": "icons/three-island-48.png",
+		"default_title": "Three Island",
+		"default_popup": "popup/popup.html"
+	},
+	"content_scripts": [
+		{
+			"matches": ["*://play.pokemonshowdown.com/*", "*://*.psim.us/*"],
+			"js": ["three-island.js"]
+		}
+	],
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "{8cf2534c-9c6c-6ec3-526b-d9a154f042f2}"
+		}
+	}
+
+}

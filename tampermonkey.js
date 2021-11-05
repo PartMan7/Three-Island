@@ -10,9 +10,12 @@
 // ==/UserScript==
 
 
-const WINDOW = unsafeWindow;
 
-const { app, Dex, Storage } = WINDOW; // Importing PS functions
+const WINDOW = unsafeWindow;
+if (!WINDOW) return;
+
+WINDOW.R3I = true;
+const { app, Dex, Storage } = WINDOW;
 const storedPastes = {}; // Storing the data that we get from the Paste so we can display it
 
 function escapeHTML (str) {
@@ -27,20 +30,20 @@ function escapeHTML (str) {
 		.replace(/\//g, '&#x2f;');
 }
 
-function deepClone (aObject) {
+function subClone (aObject) {
 	if (!aObject) return aObject;
 
 	let v, bObject = Array.isArray(aObject) ? (new WINDOW.Array()) : (new WINDOW.Object());
 	for (const k in aObject) {
 		v = aObject[k];
-		bObject[k] = (typeof v === "object") ? deepClone(v) : v;
+		bObject[k] = (typeof v === "object") ? subClone(v) : v;
 	}
 
 	return bObject;
 }
 
 function monString (mon) {
-	mon = deepClone(mon);
+	mon = subClone(mon);
 	const arr = new WINDOW.Array();
 	arr.push(mon);
 	return `<div style="position:relative;height:32px;width:40px;display:inline-block" class="threeisland-set"><span class="picon" style="${Dex.getPokemonIcon(mon.species)};position:absolute;top:0;left:0"></span><span class="itemicon" style="${Dex.getItemIcon(mon.item)};transform:scale(0.8);position:absolute;top:15px;left:15px"></span><span class="threeisland-tooltip"><pre>${escapeHTML(Storage.exportTeam(arr))}</pre></span></div>`; // HTML-ification!
@@ -66,7 +69,8 @@ function fetchPaste (url) {
 			if (!format.startsWith('gen')) format = 'gen8' + format;
 			storedPastes[paste[1]] = { teamString, title: data.title, floatHTML: floatHTML || iconCache, team, format };
 			resolve(paste[1]);
-		}).catch(() => {
+		}).catch((err) => {
+			console.error(err);
 			reject(new Error('Paste link is invalid.'));
 		});
 	});
@@ -132,9 +136,10 @@ function runCheck (ftd, pm) {
 					// They clicked the set; we copy this to clipboard!
 					e.preventDefault();
 					const set = e.target.textContent;
+					const dark = document.getElementsByTagName('body')[0]?.classList.contains('dark');
 					WINDOW.navigator?.clipboard?.writeText(set)?.catch(() => {});
-					e.target.style['background-color'] = '#3d454e';
-					setTimeout(() => e.target.style['background-color'] = '#0d151e', 1100);
+					e.target.style['background-color'] = dark ? '#3d454e' : '#c1c8c8';
+					setTimeout(() => e.target.style['background-color'] = dark ? '#0d151e' : '#e1e8e8', 1010);
 				}
 			});
 			button.innerHTML = 'Import';
@@ -266,15 +271,19 @@ const CSS = `.threeisland-link {
 	position: relative;
 	display: inline-block;
 	border-bottom: 1px dotted black;
-	background-color: rgba(100, 100, 200, 0.5);
+	background-color: rgba(200, 200, 250, 0.5);
 	padding: 0 5px;
 	border-radius: 3px;
 }
 
+.dark .threeisland-link {
+	background-color: rgba(100, 100, 200, 0.5);
+}
+
 .threeisland-link > .threeisland-tooltip {
 	visibility: hidden;
-	background-color: #0d151e;
-	color: #ddd;
+	background-color: #e1e8e8;
+	color: #fff;
 	text-align: center;
 	padding: 5px;
 	border-radius: 6px;
@@ -285,6 +294,11 @@ const CSS = `.threeisland-link {
 	bottom: 100%;
 	left: 50%;
 	margin-left: -50%;
+}
+
+.dark .threeisland-link > .threeisland-tooltip {
+	background-color: #0d151e;
+	color: #ddd;
 }
 
 .threeisland-link:hover > .threeisland-tooltip {
@@ -323,8 +337,8 @@ const CSS = `.threeisland-link {
 
 .threeisland-set > .threeisland-tooltip {
 	visibility: hidden;
-	background-color: #0d151e;
-	color: #ddd;
+	background-color: #e1e8e8;
+	color: #000;
 	text-align: center;
 	padding: 5px 10px 5px;
 	border-radius: 6px;
@@ -335,6 +349,11 @@ const CSS = `.threeisland-link {
 	bottom: 100%;
 	left: 50%;
 	margin-left: -50%;
+}
+
+.dark .threeisland-set > .threeisland-tooltip {
+	background-color: #0d151e;
+	color: #ddd;
 }
 
 .threeisland-set:hover > .threeisland-tooltip {
@@ -349,5 +368,3 @@ const CSS = `.threeisland-link {
 }`;
 
 addCSS(CSS);
-
-/* End */
