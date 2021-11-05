@@ -4,7 +4,7 @@ Three Island doesn't actually look at the messages sent/received by the app. Thi
 
 Three Island does, on the other hand, have access to your Storage on Pokémon Showdown. This means that it has access to all your teams and Showdown settings. Extreme care has been taken to ensure that this has no risks of corrupting your saved data (losing your teams sucks), but it is still recommended that you take a backup of your teams anyways. Three Island will not misuse access to your storage, and will only use it for the purposes of adding new teams as directed by the end user.
 
-Three Island similarly has access to messages on the pages you visit on Smogon, but only searches though nodes to render the PokéPaste previews.
+Three Island similarly has access to messages on the pages you visit on Smogon, but only searches though nodes to render the PokéPaste previews. (Smogon previews are under development.)
 
 ### The data Three Island stores
 
