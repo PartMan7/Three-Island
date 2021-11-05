@@ -10,11 +10,9 @@
 // ==/UserScript==
 
 
-browser.storage.sync.get('enabled').then(val => {
-	if (!val.enabled) return;
-
-	const WINDOW = window.wrappedJSObject;
-	if (!WINDOW) return; // This only works in Firefox
+function ThreeIsland () {
+	const WINDOW = window;
+	if (!WINDOW || WINDOW.R3I) return;
 
 	WINDOW.R3I = true;
 	const { app, Dex, Storage } = WINDOW;
@@ -371,4 +369,9 @@ browser.storage.sync.get('enabled').then(val => {
 
 	addCSS(CSS);
 
-}).catch(console.error);
+}
+try {
+	ThreeIsland();
+} catch (err) {
+	console.error(err);
+}

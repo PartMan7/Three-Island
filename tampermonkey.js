@@ -136,7 +136,7 @@ function runCheck (ftd, pm) {
 					// They clicked the set; we copy this to clipboard!
 					e.preventDefault();
 					const set = e.target.textContent;
-					const dark = document.getElementsByTagName('body')[0]?.classList.contains('dark');
+					const dark = document.getElementsByTagName('html')[0]?.classList.contains('dark');
 					WINDOW.navigator?.clipboard?.writeText(set)?.catch(() => {});
 					e.target.style['background-color'] = dark ? '#3d454e' : '#c1c8c8';
 					setTimeout(() => e.target.style['background-color'] = dark ? '#0d151e' : '#e1e8e8', 1010);
