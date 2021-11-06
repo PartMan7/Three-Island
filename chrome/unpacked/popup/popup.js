@@ -8,6 +8,6 @@ toggle.addEventListener('change', event => {
 
 window.addEventListener('DOMContentLoaded', () => {
 	chrome.storage.sync.get('enabled', val => {
-		toggle.checked = Boolean(val.enabled);
+		toggle.checked = (val.enabled !== '');
 	});
 });

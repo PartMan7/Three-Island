@@ -8,6 +8,6 @@ toggle.addEventListener('change', event => {
 
 window.addEventListener('DOMContentLoaded', () => {
 	browser.storage.sync.get('enabled').then(val => {
-		toggle.checked = Boolean(val.enabled);
+		toggle.checked = (val.enabled !== '');
 	});
 });

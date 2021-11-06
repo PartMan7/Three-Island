@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Three Island",
-	"version": "1.0",
+	"version": "1.0.1",
 	"description": "A Firefox extension for Pokemon Showdown that offers a seamless Poképaste experience.",
 	"homepage_url": "https://github.com/PartMan7/Three-Island",
 	"icons": {

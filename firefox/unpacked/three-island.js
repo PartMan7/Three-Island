@@ -11,7 +11,7 @@
 
 
 browser.storage.sync.get('enabled').then(val => {
-	if (!val.enabled) return;
+	if (val.enabled === '') return;
 
 	const WINDOW = window.wrappedJSObject;
 	if (!WINDOW) return; // This only works in Firefox
