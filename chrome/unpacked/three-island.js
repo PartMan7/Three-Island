@@ -46,7 +46,7 @@ function ThreeIsland () {
 		mon = subClone(mon);
 		const arr = new WINDOW.Array();
 		arr.push(mon);
-		return `<div style="position:relative;height:32px;width:40px;display:inline-block" class="threeisland-set"><span class="picon" style="${Dex.getPokemonIcon(mon.species)};position:absolute;top:0;left:0"></span><span class="itemicon" style="${Dex.getItemIcon(mon.item)};transform:scale(0.8);position:absolute;top:15px;left:15px"></span><span class="threeisland-tooltip"><pre>${escapeHTML(Storage.exportTeam(arr))}</pre></span></div>`; // HTML-ification!
+		return `<div style="position:relative;height:32px;width:40px;display:inline-block" class="threeisland-set"><span class="picon" style="${escapeHTML(Dex.getPokemonIcon(mon.species))};position:absolute;top:0;left:0"></span><span class="itemicon" style="${escapeHTML(Dex.getItemIcon(mon.item))};transform:scale(0.8);position:absolute;top:15px;left:15px"></span><span class="threeisland-tooltip"><pre>${escapeHTML(Storage.exportTeam(arr))}</pre></span></div>`; // HTML-ification!
 	}
 
 	function fetchPaste (url) {
