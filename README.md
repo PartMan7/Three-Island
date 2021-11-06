@@ -45,6 +45,9 @@ Three Island should now be running. If you wish to disable it, click the Tamperm
 * The extension isn't working even though it's been installed!
 - Did you remember to enable the extension? By default, the extension is **disabled**; you can enable it by clicking the icon and hitting the toggle. If done correctly, the slider underneath the Dhelmise icon in the popup should be blue.
 ---
+* I did that, but it still isn't working!
+- Did you refresh the page?
+---
 * Do you plan on supporting XYZ feature?
 - If you'd like to see something added, let me know! I'll investigate and see if it's worth adding / is doable.
 ---
