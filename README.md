@@ -13,11 +13,12 @@ It is currently a script that may be run on various browsers through Greasemonke
 
 ## Installation
 
-### Firefox Extension (preview)
-The extension hasn't yet been published on the Add-on Store yet, but you can already test it out! Download the `firefox/three-island.xpi` file to your device, open Firefox, visit the [Debugging page](about:debugging) (Firefox-only), click `This Firefox`, and hit `Load Temporary Add-on`. Here, select the XPI file you just downloaded, and voíla! The extension should be running in this session.
+### Firefox Extension
+You can install the extension from addons.mozilla.org at https://addons.mozilla.org/en-US/firefox/addon/three-island/.
+You can also test out upcoming versions (if they exist)! Download the `firefox/three-island.xpi` file to your device, open Firefox, visit the Debugging page (about:debugging) (Firefox-only), click `This Firefox`, and hit `Load Temporary Add-on`. Here, select the XPI file you just downloaded, and voíla! The extension should be running in this session.
 
 ### Chrome (and other browsers) Extension (preview)
-The extension hasn't yet been published on the Chrome Web Store yet, but you can test it out! Download the `chrome/three-island.zip` file to your device and unzip it. Then navigate to the `chrome://extensions` page (tested on Chrome and Opera), enable Developer mode (if disabled), and select `Load unpacked`. Here, select the unzipped directory (the `three-island` folder) - the extension should now be running!
+The extension hasn't yet been published on the Chrome Web Store yet (it's under review), but you can test it out! Download the `chrome/three-island.zip` file to your device and unzip it. Then navigate to the `chrome://extensions` page (tested on Chrome and Opera), enable Developer mode (if disabled), and select `Load unpacked`. Here, select the unzipped directory (the `three-island` folder) - the extension should now be running!
 
 ### Greasemonkey
 1. On Firefox, install the [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) extension.
