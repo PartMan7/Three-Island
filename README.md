@@ -12,7 +12,7 @@ Three Island is a script/extension for Pokémon Showdown on various browsers tha
 ## Installation
 
 ### Firefox Extension
-You can install the extension from addons.mozilla.org at https://addons.mozilla.org/en-US/firefox/addon/three-island/.After installing, make sure to enable the extension by clicking the slider below the icon (which should look like [this](https://cdn.discordapp.com/attachments/762324232948023316/907888483098587177/Extension3I_aifgvhb.png)), and refresh the page!
+You can install the extension from addons.mozilla.org at https://addons.mozilla.org/en-US/firefox/addon/three-island/. After installing, make sure to enable the extension by clicking the slider below the icon (which should look like [this](https://cdn.discordapp.com/attachments/762324232948023316/907888483098587177/Extension3I_aifgvhb.png)), and refresh the page!
 <br/>
 You can also test out upcoming versions (if they exist)! Download the `firefox/three-island.xpi` file to your device, open Firefox, visit the Debugging page (about:debugging) (Firefox-only), click `This Firefox`, and hit `Load Temporary Add-on`. Here, select the XPI file you just downloaded, and voíla! The extension should be running in this session.
 
