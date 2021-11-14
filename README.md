@@ -78,3 +78,19 @@ Three Island should now be running. If you wish to disable it, click the Tamperm
 
 ### Contributions
 For contributions, suggestions, questions, or just generic discussion, message me on Discord at PartMan#7321 or contact me on [Smogon](https://www.smogon.com/forums/members/partman.470255/)/Showdown.
+
+
+### Version History
+
+#### 1.0.2
+Minor bugfixes:
+* Sets will no longer throw alerts for invalid hidden powers (this was awkward)
+* Pastes with more than 24 sets will not be shown in their entirety; a summary will be shown with the first 24 Pokémon instead
+* Fixed a small bug where light mode had white text instead of black
+
+#### 1.0.1
+Minor QoL change:
+* The extension defaults to 'enabled' instead of 'disabled'
+
+#### 1.0.0
+Original release!

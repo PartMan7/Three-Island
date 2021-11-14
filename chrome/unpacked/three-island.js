@@ -15,7 +15,7 @@ function ThreeIsland () {
 	if (!WINDOW || WINDOW.R3I) return;
 
 	WINDOW.R3I = true;
-	const { app, Dex, Storage } = WINDOW;
+	const { app, Dex, Storage, BattleStatNames } = WINDOW;
 	const storedPastes = {}; // Storing the data that we get from the Paste so we can display it
 
 	function escapeHTML (str) {
@@ -42,11 +42,128 @@ function ThreeIsland () {
 		return bObject;
 	}
 
+	function exportTeam (team) {
+		if (!team) return "";
+		if (typeof team === 'string') {
+			if (team.indexOf('\n') >= 0) return team;
+			team = Storage.unpackTeam(team);
+		}
+		var text = '';
+		for (var i = 0; i < team.length; i++) {
+			var curSet = team[i];
+			if (curSet.name && curSet.name !== curSet.species) {
+				text += '' + curSet.name + ' (' + curSet.species + ')';
+			} else {
+				text += '' + curSet.species;
+			}
+			if (curSet.gender === 'M') text += ' (M)';
+			if (curSet.gender === 'F') text += ' (F)';
+			if (curSet.item) {
+				text += ' @ ' + curSet.item;
+			}
+			text += "  \n";
+			if (curSet.ability) {
+				text += 'Ability: ' + curSet.ability + "  \n";
+			}
+			if (curSet.level && curSet.level != 100) {
+				text += 'Level: ' + curSet.level + "  \n";
+			}
+			if (curSet.shiny) {
+				text += 'Shiny: Yes  \n';
+			}
+			if (typeof curSet.happiness === 'number' && curSet.happiness !== 255 && !isNaN(curSet.happiness)) {
+				text += 'Happiness: ' + curSet.happiness + "  \n";
+			}
+			if (curSet.pokeball) {
+				text += 'Pokeball: ' + curSet.pokeball + "  \n";
+			}
+			if (curSet.hpType) {
+				text += 'Hidden Power: ' + curSet.hpType + "  \n";
+			}
+			if (curSet.gigantamax) {
+				text += 'Gigantamax: Yes  \n';
+			}
+			var first = true;
+			if (curSet.evs) {
+				for (var j in BattleStatNames) {
+					if (!curSet.evs[j]) continue;
+					if (first) {
+						text += 'EVs: ';
+						first = false;
+					} else {
+						text += ' / ';
+					}
+					text += '' + curSet.evs[j] + ' ' + BattleStatNames[j];
+				}
+			}
+			if (!first) {
+				text += "  \n";
+			}
+			if (curSet.nature) {
+				text += '' + curSet.nature + ' Nature' + "  \n";
+			}
+			var first = true;
+			if (curSet.ivs) {
+				var defaultIvs = true;
+				var hpType = false;
+				for (var j = 0; j < curSet.moves.length; j++) {
+					var move = curSet.moves[j];
+					if (move.substr(0, 13) === 'Hidden Power ' && move.substr(0, 14) !== 'Hidden Power [') {
+						hpType = move.substr(13);
+						if (!Dex.types.isName(hpType)) {
+							continue;
+						}
+						for (var stat in BattleStatNames) {
+							if ((curSet.ivs[stat] === undefined ? 31 : curSet.ivs[stat]) !== (Dex.types.get(hpType).HPivs[stat] || 31)) {
+								defaultIvs = false;
+								break;
+							}
+						}
+					}
+				}
+				if (defaultIvs && !hpType) {
+					for (var stat in BattleStatNames) {
+						if (curSet.ivs[stat] !== 31 && curSet.ivs[stat] !== undefined) {
+							defaultIvs = false;
+							break;
+						}
+					}
+				}
+				if (!defaultIvs) {
+					for (var stat in BattleStatNames) {
+						if (typeof curSet.ivs[stat] === 'undefined' || isNaN(curSet.ivs[stat]) || curSet.ivs[stat] == 31) continue;
+						if (first) {
+							text += 'IVs: ';
+							first = false;
+						} else {
+							text += ' / ';
+						}
+						text += '' + curSet.ivs[stat] + ' ' + BattleStatNames[stat];
+					}
+				}
+			}
+			if (!first) {
+				text += "  \n";
+			}
+			if (curSet.moves) for (var j = 0; j < curSet.moves.length; j++) {
+				var move = curSet.moves[j];
+				if (move.substr(0, 13) === 'Hidden Power ') {
+					move = move.substr(0, 13) + '[' + move.substr(13) + ']';
+				}
+				if (move) {
+					text += '- ' + move + "  \n";
+				}
+			}
+			text += "\n";
+		}
+		return text;
+	}
+
 	function monString (mon) {
 		mon = subClone(mon);
 		const arr = new WINDOW.Array();
 		arr.push(mon);
-		return `<div style="position:relative;height:32px;width:40px;display:inline-block" class="threeisland-set"><span class="picon" style="${escapeHTML(Dex.getPokemonIcon(mon.species))};position:absolute;top:0;left:0"></span><span class="itemicon" style="${escapeHTML(Dex.getItemIcon(mon.item))};transform:scale(0.8);position:absolute;top:15px;left:15px"></span><span class="threeisland-tooltip"><pre>${escapeHTML(Storage.exportTeam(arr))}</pre></span></div>`; // HTML-ification!
+		return `<div style="position:relative;height:32px;width:40px;display:inline-block" class="threeisland-set"><span class="picon" style="${escapeHTML(Dex.getPokemonIcon(mon.species))};position:absolute;top:0;left:0"></span><span class="itemicon" style="${escapeHTML(Dex.getItemIcon(mon.item))};transform:scale(0.8);position:absolute;top:15px;left:15px"></span><span class="threeisland-tooltip"><pre>${escapeHTML(exportTeam(arr))}</pre></span></div>`; // HTML-ification!
 	}
 
 	function fetchPaste (url) {
@@ -62,7 +179,8 @@ function ThreeIsland () {
 				const team = Storage.importTeam(data.paste);
 				const teamString = Storage.packTeam(team);
 				let floatHTML = '';
-				for (let i = 0; i < team.length; i++) floatHTML += monString(team[i]); // Access denied if we try to run Array#map
+				for (let i = 0; i < team.length && i < 24; i++) floatHTML += monString(team[i]); // Access denied if we try to run Array#map
+				if (team.length > 24) floatHTML += `...and ${team.length - 1} more`;
 				let format = 'gen8';
 				const matched = data.notes.match(/[Ff]ormat *(?:[:-] *)?([a-z0-9]+)/);
 				if (matched) format = matched[1];
@@ -283,7 +401,7 @@ function ThreeIsland () {
 	.threeisland-link > .threeisland-tooltip {
 		visibility: hidden;
 		background-color: #e1e8e8;
-		color: #fff;
+		color: #000;
 		text-align: center;
 		padding: 5px;
 		border-radius: 6px;
