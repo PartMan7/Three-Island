@@ -82,6 +82,9 @@ For contributions, suggestions, questions, or just generic discussion, message m
 
 ### Version History
 
+#### 1.0.3
+Very minor tweaks to the code and comments. The architecture of the entire repository changed, which shouldn't affect the extension itself in any way.
+
 #### 1.0.2
 Minor bugfixes:
 * Sets will no longer throw alerts for invalid hidden powers (this was awkward)
