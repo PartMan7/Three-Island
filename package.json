@@ -4,7 +4,8 @@
   "description": "Three Island is a script/extension for Pokémon Showdown on various browsers that allows for a seamless PokéPaste experience.",
   "main": "compiler.js",
   "scripts": {
-    "build": "node compiler.js",
+    "build": "npm run compile && web-ext build",
+    "compile": "node compiler.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,8 +20,17 @@
   },
   "homepage": "https://github.com/PartMan7/Three-Island#readme",
   "dependencies": {
-    "deterministic-zip": "^1.1.0",
     "fs-extra": "^11.1.1",
     "zip-promise": "^1.1.1"
+  },
+  "devDependencies": {
+    "web-ext": "^7.6.0"
+  },
+  "webExt": {
+    "artifactsDir": "dist/firefox",
+    "sourceDir": "dist/firefox/unpacked",
+    "build": {
+      "overwriteDest": true
+    }
   }
 }

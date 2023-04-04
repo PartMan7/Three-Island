@@ -73,8 +73,8 @@ async function build () {
 	const chromePath = path.join(__dirname, 'dist', 'chrome');
 	const scriptPath = path.join(__dirname, 'dist', 'scripts');
 
-	await fs.emptyDir(firefoxPath);
-	await fs.emptyDir(chromePath);
+	await fs.emptyDir(path.join(firefoxPath, 'unpacked'));
+	await fs.emptyDir(path.join(chromePath, 'unpacked'));
 	await fs.emptyDir(scriptPath);
 
 	await fs.copy(path.join(__dirname, 'icons'), path.join(firefoxPath, 'unpacked', 'icons'));
@@ -115,8 +115,9 @@ async function build () {
 	if (process.platform === 'linux') execSync('find dist/firefox/unpacked -exec touch -t 196906090420 {} +', { cwd: __dirname });
 
 	// Create archives
-	await zip.folder(path.join(firefoxPath, 'unpacked'), path.join(firefoxPath, 'three-island.xpi'));
-	await zip.folder(path.join(chromePath, 'unpacked'), path.join(chromePath, 'three-island.zip'));
+	await zip.folder(path.join(chromePath, 'unpacked'), path.join(chromePath, `three_island-${package.version}.zip`));
+	// Firefox is now published using web-ext
+	// await zip.folder(path.join(firefoxPath, 'unpacked'), path.join(firefoxPath, 'three-island.xpi'));
 
 	const readme = await fs.readFile(path.join(__dirname, 'README.md'), 'utf8');
 	const [, month, date, year] = new Date().toDateString().split(' ');
