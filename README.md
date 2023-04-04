@@ -1,4 +1,5 @@
 # Three Island
+<img src="https://img.shields.io/static/v1?label=Last%20published&message=4th%20Apr,%202023&color=blue"/> <img src="https://img.shields.io/amo/users/three-island?label=Firefox%20users"/> <img src="https://img.shields.io/chrome-web-store/users/glhggmffomgbggeobkijjhojkjopfpho?label=Chrome%20users"/>
 
 Three Island is a script/extension for Pokémon Showdown on various browsers that allows for a seamless PokéPaste experience.
 
