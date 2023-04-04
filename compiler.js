@@ -75,6 +75,9 @@ async function build () {
 	await fs.emptyDir(chromePath);
 	await fs.emptyDir(scriptPath);
 
+	await fs.copy(path.join(__dirname, 'icons'), path.join(firefoxPath, 'unpacked', 'icons'));
+	await fs.copy(path.join(__dirname, 'icons'), path.join(chromePath, 'unpacked', 'icons'));
+
 	await fs.copy(path.join(__dirname, 'popup'), path.join(firefoxPath, 'unpacked', 'popup'));
 	await fs.copy(path.join(__dirname, 'popup'), path.join(chromePath, 'unpacked', 'popup'));
 
