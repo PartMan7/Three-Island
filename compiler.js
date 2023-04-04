@@ -77,6 +77,7 @@ async function build () {
 
 	await fs.copy(path.join(__dirname, 'popup'), path.join(firefoxPath, 'unpacked', 'popup'));
 	await fs.copy(path.join(__dirname, 'popup'), path.join(chromePath, 'unpacked', 'popup'));
+
 	await fs.move(path.join(firefoxPath, 'unpacked', 'popup', 'popup-firefox.js'), path.join(firefoxPath, 'unpacked', 'popup', 'popup.js'));
 	await fs.remove(path.join(firefoxPath, 'unpacked', 'popup', 'popup-chrome.js'));
 
