@@ -393,7 +393,7 @@ browser.storage.sync.get('enabled').then(val => {
 		if (!head) return;
 		style = document.createElement('style');
 		style.type = 'text/css';
-		style.innerHTML = css;
+		style.innerText = css;
 		head.appendChild(style);
 	}
 

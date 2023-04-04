@@ -391,7 +391,7 @@ function addCSS (css) {
 	if (!head) return;
 	style = document.createElement('style');
 	style.type = 'text/css';
-	style.innerHTML = css;
+	style.innerText = css;
 	head.appendChild(style);
 }
 
