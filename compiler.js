@@ -67,9 +67,9 @@ async function build () {
 	chromeManifest.content_scripts[0].js = ['syringe.js'];
 	chromeManifest.web_accessible_resources = [{ resources: ['three-island.js'], matches: ['<all_urls>'] }];
 
-	const firefoxPath = path.join(__dirname, 'firefox');
-	const chromePath = path.join(__dirname, 'chrome');
-	const scriptPath = path.join(__dirname, 'scripts');
+	const firefoxPath = path.join(__dirname, 'dist', 'firefox');
+	const chromePath = path.join(__dirname, 'dist', 'chrome');
+	const scriptPath = path.join(__dirname, 'dist', 'scripts');
 
 	await fs.emptyDir(firefoxPath);
 	await fs.emptyDir(chromePath);
