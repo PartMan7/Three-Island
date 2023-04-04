@@ -16,13 +16,13 @@ Three Island is a script/extension for Pokémon Showdown on various browsers tha
 You can install the extension from addons.mozilla.org at https://addons.mozilla.org/en-US/firefox/addon/three-island/. After installing, make sure to enable the extension by clicking the slider below the icon (which should look like [this](https://cdn.discordapp.com/attachments/762324232948023316/907888483098587177/Extension3I_aifgvhb.png)), and refresh the page!
 
 ### Firefox Extension (preview)
-You can also test out upcoming versions (if they exist)! Download the `dist/firefox/three-island.xpi` file to your device, open Firefox, visit the Debugging page (about:debugging) (Firefox-only), click `This Firefox`, and hit `Load Temporary Add-on`. Here, select the XPI file you just downloaded, and voíla! The extension should be running in this session.
+You can also test out upcoming versions (if they exist)! Download the `dist/firefox/three_island-latest.xpi` file to your device, open Firefox, visit the Debugging page (about:debugging) (Firefox-only), click `This Firefox`, and hit `Load Temporary Add-on`. Here, select the XPI file you just downloaded, and voíla! The extension should be running in this session.
 
 ### Chrome Web Store Extension
 You can install the extension from the Chrome Web Store at https://chrome.google.com/webstore/detail/three-island/glhggmffomgbggeobkijjhojkjopfpho. After installing, make sure to enable the extension by clicking the slider below the icon (which should look like [this](https://cdn.discordapp.com/attachments/762324232948023316/907888483098587177/Extension3I_aifgvhb.png)), and refresh the page!
 
 ### Chrome (and other browsers) Extension (preview)
-You can test out the most recent version of Three Island! Download the `dist/chrome/three-island.zip` file to your device and unzip it. Then navigate to the `chrome://extensions` page (tested on Chrome and Opera), enable Developer mode (if disabled), and select `Load unpacked`. Here, select the unzipped directory (the `three-island` folder) - the extension should now be running!
+You can test out the most recent version of Three Island! Download the `dist/chrome/three_island-latest.zip` file to your device and unzip it. Then navigate to the `chrome://extensions` page (tested on Chrome and Opera), enable Developer mode (if disabled), and select `Load unpacked`. Here, select the unzipped directory (the `three-island` folder) - the extension should now be running!
 
 ### Greasemonkey
 1. On Firefox, install the [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) extension.
