@@ -36,7 +36,6 @@ async function build () {
 			'*://*.psim.us/*',
 			'*://pokepast.es/**'
 		],
-		host_permissions: [],
 		action: {
 			default_icon: 'icons/three-island-48.png',
 			default_title: 'Three Island',
@@ -56,14 +55,16 @@ async function build () {
 
 	firefoxManifest.manifest_version = 2;
 	firefoxManifest.description = firefoxManifest.description.replace(/{BROWSER}/g, 'Firefox');
-	delete firefoxManifest.host_permissions;
 	firefoxManifest.browser_action = firefoxManifest.action;
 	delete firefoxManifest.action;
 	firefoxManifest.browser_specific_settings = { gecko: { id: '{8cf2534c-9c6c-6ec3-526b-d9a154f042f2}' } };
 
 	chromeManifest.manifest_version = 3;
 	chromeManifest.description = chromeManifest.description.replace(/{BROWSER}/g, 'Chrome');
-	chromeManifest.host_permissions.push(...chromeManifest.permissions.splice(1, 3));
+	chromeManifest.permissions = chromeManifest.permissions.slice();
+	chromeManifest.content_scripts = chromeManifest.content_scripts.slice();
+	chromeManifest.host_permissions = chromeManifest.permissions.splice(1, 3);
+	chromeManifest.content_scripts[0] = Object.assign({}, chromeManifest.content_scripts[0]);
 	chromeManifest.content_scripts[0].js = ['syringe.js'];
 	chromeManifest.web_accessible_resources = [{ resources: ['three-island.js'], matches: ['<all_urls>'] }];
 

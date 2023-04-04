@@ -10,7 +10,10 @@
 		"128": "icons/three-island-128.png"
 	},
 	"permissions": [
-		"storage"
+		"storage",
+		"*://play.pokemonshowdown.com/*",
+		"*://*.psim.us/*",
+		"*://pokepast.es/**"
 	],
 	"content_scripts": [
 		{
@@ -19,7 +22,7 @@
 				"*://*.psim.us/*"
 			],
 			"js": [
-				"syringe.js"
+				"three-island.js"
 			]
 		}
 	],

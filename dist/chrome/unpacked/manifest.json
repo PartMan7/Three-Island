@@ -12,11 +12,6 @@
 	"permissions": [
 		"storage"
 	],
-	"host_permissions": [
-		"*://play.pokemonshowdown.com/*",
-		"*://*.psim.us/*",
-		"*://pokepast.es/**"
-	],
 	"action": {
 		"default_icon": "icons/three-island-48.png",
 		"default_title": "Three Island",
@@ -32,6 +27,11 @@
 				"syringe.js"
 			]
 		}
+	],
+	"host_permissions": [
+		"*://play.pokemonshowdown.com/*",
+		"*://*.psim.us/*",
+		"*://pokepast.es/**"
 	],
 	"web_accessible_resources": [
 		{
