@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     Three Island
-// @version  1.0.2
+// @version  1.1.0
 // @grant    unsafeWindow
 // @author   PartMan
 // @match    http://play.pokemonshowdown.com/*
@@ -36,14 +36,14 @@ function subClone (aObject) {
 	let v, bObject = Array.isArray(aObject) ? (new WINDOW.Array()) : (new WINDOW.Object());
 	for (const k in aObject) {
 		v = aObject[k];
-		bObject[k] = (typeof v === "object") ? subClone(v) : v;
+		bObject[k] = (typeof v === 'object') ? subClone(v) : v;
 	}
 
 	return bObject;
 }
 
 function exportTeam (team) {
-	if (!team) return "";
+	if (!team) return '';
 	if (typeof team === 'string') {
 		if (team.indexOf('\n') >= 0) return team;
 		team = Storage.unpackTeam(team);
@@ -61,24 +61,24 @@ function exportTeam (team) {
 		if (curSet.item) {
 			text += ' @ ' + curSet.item;
 		}
-		text += "  \n";
+		text += '  \n';
 		if (curSet.ability) {
-			text += 'Ability: ' + curSet.ability + "  \n";
+			text += 'Ability: ' + curSet.ability + '  \n';
 		}
 		if (curSet.level && curSet.level != 100) {
-			text += 'Level: ' + curSet.level + "  \n";
+			text += 'Level: ' + curSet.level + '  \n';
 		}
 		if (curSet.shiny) {
 			text += 'Shiny: Yes  \n';
 		}
 		if (typeof curSet.happiness === 'number' && curSet.happiness !== 255 && !isNaN(curSet.happiness)) {
-			text += 'Happiness: ' + curSet.happiness + "  \n";
+			text += 'Happiness: ' + curSet.happiness + '  \n';
 		}
 		if (curSet.pokeball) {
-			text += 'Pokeball: ' + curSet.pokeball + "  \n";
+			text += 'Pokeball: ' + curSet.pokeball + '  \n';
 		}
 		if (curSet.hpType) {
-			text += 'Hidden Power: ' + curSet.hpType + "  \n";
+			text += 'Hidden Power: ' + curSet.hpType + '  \n';
 		}
 		if (curSet.gigantamax) {
 			text += 'Gigantamax: Yes  \n';
@@ -97,10 +97,10 @@ function exportTeam (team) {
 			}
 		}
 		if (!first) {
-			text += "  \n";
+			text += '  \n';
 		}
 		if (curSet.nature) {
-			text += '' + curSet.nature + ' Nature' + "  \n";
+			text += '' + curSet.nature + ' Nature' + '  \n';
 		}
 		var first = true;
 		if (curSet.ivs) {
@@ -143,7 +143,7 @@ function exportTeam (team) {
 			}
 		}
 		if (!first) {
-			text += "  \n";
+			text += '  \n';
 		}
 		if (curSet.moves) for (var j = 0; j < curSet.moves.length; j++) {
 			var move = curSet.moves[j];
@@ -151,10 +151,10 @@ function exportTeam (team) {
 				move = move.substr(0, 13) + '[' + move.substr(13) + ']';
 			}
 			if (move) {
-				text += '- ' + move + "  \n";
+				text += '- ' + move + '  \n';
 			}
 		}
-		text += "\n";
+		text += '\n';
 	}
 	return text;
 }
@@ -163,11 +163,13 @@ function monString (mon) {
 	mon = subClone(mon);
 	const arr = new WINDOW.Array();
 	arr.push(mon);
+	// TODO: Use HTML nodes
 	return `<div style="position:relative;height:32px;width:40px;display:inline-block" class="threeisland-set"><span class="picon" style="${escapeHTML(Dex.getPokemonIcon(mon.species))};position:absolute;top:0;left:0"></span><span class="itemicon" style="${escapeHTML(Dex.getItemIcon(mon.item))};transform:scale(0.8);position:absolute;top:15px;left:15px"></span><span class="threeisland-tooltip"><pre>${escapeHTML(exportTeam(arr))}</pre></span></div>`; // HTML-ification!
 }
 
 function fetchPaste (url) {
 	// Gets and stores the data from Pastes that are posted
+	// TODO: Create elements dynamically instead of using raw HTML
 	return new Promise((resolve, reject) => {
 		if (!url) return reject(new Error('No URL'));
 		const paste = url.match(/pokepast\.es\/([a-zA-Z0-9]+)/);
@@ -180,7 +182,7 @@ function fetchPaste (url) {
 			const teamString = Storage.packTeam(team);
 			let floatHTML = '';
 			for (let i = 0; i < team.length && i < 24; i++) floatHTML += monString(team[i]); // Access denied if we try to run Array#map
-				if (team.length > 24) floatHTML += `...and ${team.length - 1} more`;
+			if (team.length > 24) floatHTML += `...and ${team.length - 1} more`;
 			let format = 'gen8';
 			const matched = data.notes.match(/[Ff]ormat *(?:[:-] *)?([a-z0-9]+)/);
 			if (matched) format = matched[1];
@@ -232,7 +234,8 @@ function validRoom (room) {
 }
 
 function runCheck (ftd, pm) {
-	// format chat messages with valid PokePaste links
+	// Format chat messages with valid PokePaste links
+	// TODO: NODES
 	if (!ftd) return;
 	if (ftd.nodeName !== 'A') return;
 	if (/^(?:https?:\/\/)?pokepast\.es\/[a-zA-Z0-9]+$/.test(ftd.href)) {
@@ -385,104 +388,106 @@ function addCSS (css) {
 	head.appendChild(style);
 }
 
-const CSS = `.threeisland-link {
-	position: relative;
-	display: inline-block;
-	border-bottom: 1px dotted black;
-	background-color: rgba(200, 200, 250, 0.5);
-	padding: 0 5px;
-	border-radius: 3px;
-}
+const CSS = `
+	.threeisland-link {
+		position: relative;
+		display: inline-block;
+		border-bottom: 1px dotted black;
+		background-color: rgba(200, 200, 250, 0.5);
+		padding: 0 5px;
+		border-radius: 3px;
+	}
 
-.dark .threeisland-link {
-	background-color: rgba(100, 100, 200, 0.5);
-}
+	.dark .threeisland-link {
+		background-color: rgba(100, 100, 200, 0.5);
+	}
 
-.threeisland-link > .threeisland-tooltip {
-	visibility: hidden;
-	background-color: #e1e8e8;
-	color: #000;
-	text-align: center;
-	padding: 5px;
-	border-radius: 6px;
-	border: 1px solid #999;
-	position: absolute;
-	z-index: 1;
-	width: 250px;
-	bottom: 100%;
-	left: 50%;
-	margin-left: -50%;
-}
+	.threeisland-link > .threeisland-tooltip {
+		visibility: hidden;
+		background-color: #e1e8e8;
+		color: #000;
+		text-align: center;
+		padding: 5px;
+		border-radius: 6px;
+		border: 1px solid #999;
+		position: absolute;
+		z-index: 1;
+		width: 250px;
+		bottom: 100%;
+		left: 50%;
+		margin-left: -50%;
+	}
 
-.dark .threeisland-link > .threeisland-tooltip {
-	background-color: #0d151e;
-	color: #ddd;
-}
+	.dark .threeisland-link > .threeisland-tooltip {
+		background-color: #0d151e;
+		color: #ddd;
+	}
 
-.threeisland-link:hover > .threeisland-tooltip {
-	visibility: visible;
-}
+	.threeisland-link:hover > .threeisland-tooltip {
+		visibility: visible;
+	}
 
-.threeisland-images {
-	width: 250px;
-	min-width: 250px;
-	max-width: 250px;
-	min-height: 30px;
-}
+	.threeisland-images {
+		width: 250px;
+		min-width: 250px;
+		max-width: 250px;
+		min-height: 30px;
+	}
 
-.threeisland-tooltip.threeisland-pm {
-	min-width: 200px;
-	max-width: 200px;
-	width: 200px;
-	display: flex;
-}
+	.threeisland-tooltip.threeisland-pm {
+		min-width: 200px;
+		max-width: 200px;
+		width: 200px;
+		display: flex;
+	}
 
-.threeisland-tooltip.threeisland-pm > center {
-	min-width: 150px;
-	max-width: 150px;
-	width: 150px;
-}
+	.threeisland-tooltip.threeisland-pm > center {
+		min-width: 150px;
+		max-width: 150px;
+		width: 150px;
+	}
 
-.threeisland-images > span {
-	float: none !important;
-}
+	.threeisland-images > span {
+		float: none !important;
+	}
 
 
-.threeisland-set {
-	position: relative;
-	display: inline-block;
-}
+	.threeisland-set {
+		position: relative;
+		display: inline-block;
+	}
 
-.threeisland-set > .threeisland-tooltip {
-	visibility: hidden;
-	background-color: #e1e8e8;
-	color: #000;
-	text-align: center;
-	padding: 5px 10px 5px;
-	border-radius: 6px;
-	border: 1px solid #999;
-	position: absolute;
-	z-index: 1;
-	width: 250px;
-	bottom: 100%;
-	left: 50%;
-	margin-left: -50%;
-}
+	.threeisland-set > .threeisland-tooltip {
+		visibility: hidden;
+		background-color: #e1e8e8;
+		color: #000;
+		text-align: center;
+		padding: 5px 10px 5px;
+		border-radius: 6px;
+		border: 1px solid #999;
+		position: absolute;
+		z-index: 1;
+		width: 250px;
+		bottom: 100%;
+		left: 50%;
+		margin-left: -50%;
+	}
 
-.dark .threeisland-set > .threeisland-tooltip {
-	background-color: #0d151e;
-	color: #ddd;
-}
+	.dark .threeisland-set > .threeisland-tooltip {
+		background-color: #0d151e;
+		color: #ddd;
+	}
 
-.threeisland-set:hover > .threeisland-tooltip {
-	visibility: visible;
-}
+	.threeisland-set:hover > .threeisland-tooltip {
+		visibility: visible;
+	}
 
-.threeisland-tooltip > pre {
-	text-align: left;
-	white-space: pre-wrap;
-	overflow-y: scroll;
-	transition: background-color 500ms ease;
-}`;
+	.threeisland-tooltip > pre {
+		text-align: left;
+		white-space: pre-wrap;
+		overflow-y: scroll;
+		transition: background-color 500ms ease;
+	}
+`;
 
 addCSS(CSS);
