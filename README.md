@@ -40,6 +40,9 @@ Three Island should now be running. If you wish to disable it, click the Tamperm
 
 **Note**: Since these last two are just scripts, they don't update themselves. If you have an older version of the script(s) and would like to update, just copy-paste the whole thing over the old code and save.
 
+## Contributing
+The source files for Three Island are split across `popup` (for the extension display) and `src` (for the injection scripts and actual handlers). To build the extension, run `npm build` (or `node compiler.js`). Pull requests to fix bugs or introduce relevant features are improved, as are issues with detailed explanations.
+
 ## Planned Features
 * Being able to import multiple teams at the same time
 * Supporting imports from `!code` blocks that contain teams
