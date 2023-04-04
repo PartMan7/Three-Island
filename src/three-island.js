@@ -1,23 +1,12 @@
 WINDOW.R3I = true;
 const { app, Dex, Storage, BattleStatNames } = WINDOW;
+const { error, log } = WINDOW.console;
 const storedPastes = {}; // Storing the data that we get from the Paste so we can display it
-
-function escapeHTML (str) {
-	// Escapes HTML
-	if (!str) return '';
-	return ('' + str)
-		.replace(/&/g, '&amp;')
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;')
-		.replace(/"/g, '&quot;')
-		.replace(/'/g, '&apos;')
-		.replace(/\//g, '&#x2f;');
-}
 
 function subClone (aObject) {
 	if (!aObject) return aObject;
 
-	let v, bObject = Array.isArray(aObject) ? (new WINDOW.Array()) : (new WINDOW.Object());
+	let v, bObject = WINDOW.Array.isArray(aObject) ? (new WINDOW.Array()) : (new WINDOW.Object());
 	for (const k in aObject) {
 		v = aObject[k];
 		bObject[k] = (typeof v === 'object') ? subClone(v) : v;
@@ -143,17 +132,33 @@ function exportTeam (team) {
 	return text;
 }
 
-function monString (mon) {
+function monHTML (mon) {
+	// The HTML for each individual sprite
 	mon = subClone(mon);
 	const arr = new WINDOW.Array();
 	arr.push(mon);
-	// TODO: Use HTML nodes
-	return `<div style="position:relative;height:32px;width:40px;display:inline-block" class="threeisland-set"><span class="picon" style="${escapeHTML(Dex.getPokemonIcon(mon.species))};position:absolute;top:0;left:0"></span><span class="itemicon" style="${escapeHTML(Dex.getItemIcon(mon.item))};transform:scale(0.8);position:absolute;top:15px;left:15px"></span><span class="threeisland-tooltip"><pre>${escapeHTML(exportTeam(arr))}</pre></span></div>`; // HTML-ification!
+	const mainNode = document.createElement('div');
+	mainNode.style.cssText = 'position:relative;height:32px;width:40px;display:inline-block';
+	mainNode.classList.add('threeisland-set');
+	const monIcon = document.createElement('span');
+	monIcon.style.cssText = `${Dex.getPokemonIcon(mon.species)};position:absolute;top:0;left:0`;
+	monIcon.classList.add('picon');
+	const itemIcon = document.createElement('span');
+	itemIcon.style.cssText = `${Dex.getItemIcon(mon.item)};transform:scale(0.8);position:absolute;top:15px;left:15px`;
+	itemIcon.classList.add('itemicon');
+	const exportNode = document.createElement('span');
+	exportNode.classList.add('threeisland-tooltip');
+	const preNode = document.createElement('pre');
+	preNode.innerText = exportTeam(arr);
+	exportNode.appendChild(preNode);
+	mainNode.appendChild(monIcon);
+	mainNode.appendChild(itemIcon);
+	mainNode.appendChild(exportNode);
+	return mainNode;
 }
 
 function fetchPaste (url) {
 	// Gets and stores the data from Pastes that are posted
-	// TODO: Create elements dynamically instead of using raw HTML
 	return new Promise((resolve, reject) => {
 		if (!url) return reject(new Error('No URL'));
 		const paste = url.match(/pokepast\.es\/([a-zA-Z0-9]+)/);
@@ -165,16 +170,17 @@ function fetchPaste (url) {
 			const team = Storage.importTeam(data.paste);
 			const teamString = Storage.packTeam(team);
 			let floatHTML = '';
-			for (let i = 0; i < team.length && i < 24; i++) floatHTML += monString(team[i]); // Access denied if we try to run Array#map
-			if (team.length > 24) floatHTML += `...and ${team.length - 1} more`;
+			const container = document.createElement('span');
+			for (let i = 0; i < team.length && i < 24; i++) container.appendChild(monHTML(team[i])); // Access denied if we try to run Array#map
+			if (team.length > 24) container.appendChild(document.createTextNode(`... and ${team.length - 1} more`));
 			let format = 'gen8';
 			const matched = data.notes.match(/[Ff]ormat *(?:[:-] *)?([a-z0-9]+)/);
 			if (matched) format = matched[1];
 			if (!format.startsWith('gen')) format = 'gen8' + format;
-			storedPastes[paste[1]] = { teamString, title: data.title, floatHTML: floatHTML || iconCache, team, format };
+			storedPastes[paste[1]] = { teamString, title: data.title, floatHTML: container, team, format };
 			resolve(paste[1]);
 		}).catch((err) => {
-			console.error(err);
+			error(err);
 			reject(new Error('Paste link is invalid.'));
 		});
 	});
@@ -189,14 +195,14 @@ function addTeam (url) {
 		if (paste[1] === 'constructor') return reject(new Error('Well someone tried to screw me up'));
 		if (storedPastes[paste[1]]) return resolve(storedPastes[paste[1]]);
 		else return fetchPaste(url).then(data => resolve(storedPastes[data]));
-	}).catch(console.error).then(data => {
+	}).catch(error).then(data => {
 		const newTeam = new WINDOW.Object();
 		newTeam.name = data.title;
 		newTeam.format = data.format;
 		newTeam.team = data.teamString;
 		newTeam.capacity = data.team.length > 6 ? 24 : 6;
 		newTeam.folder = '';
-		newTeam.iconCache = Storage.packedTeamIcons(data.teamString);;
+		newTeam.iconCache = Storage.packedTeamIcons(data.teamString);
 		Storage.teams.unshift(newTeam);
 		if (app.rooms.teambuilder) app.rooms.teambuilder.update();
 		Storage.saveTeams();
@@ -219,7 +225,6 @@ function validRoom (room) {
 
 function runCheck (ftd, pm) {
 	// Format chat messages with valid PokePaste links
-	// TODO: NODES
 	if (!ftd) return;
 	if (ftd.nodeName !== 'A') return;
 	if (/^(?:https?:\/\/)?pokepast\.es\/[a-zA-Z0-9]+$/.test(ftd.href)) {
@@ -228,8 +233,10 @@ function runCheck (ftd, pm) {
 			const data = storedPastes[ref];
 			const tooltip = document.createElement('span');
 			if (pm) tooltip.classList.add('threeisland-pm');
-			const innerHTML = `<center class="threeisland-images">${data.floatHTML}</center>`;
-			tooltip.innerHTML = innerHTML + (pm ? '' : '<br/>');
+			const tooltipInner = document.createElement('center');
+			tooltipInner.classList.add('threeisland-images');
+			tooltipInner.appendChild(data.floatHTML.cloneNode(true));
+			tooltip.appendChild(tooltipInner);
 			tooltip.classList.add('threeisland-tooltip');
 			const button = document.createElement('button');
 			button.addEventListener('click', e => {
@@ -247,12 +254,12 @@ function runCheck (ftd, pm) {
 					setTimeout(() => e.target.style['background-color'] = dark ? '#0d151e' : '#e1e8e8', 1010);
 				}
 			});
-			button.innerHTML = 'Import';
+			button.appendChild(document.createTextNode('Import'));
 			tooltip.appendChild(button);
 			ftd.classList.add('threeisland-link');
 			if (pm) ftd.classList.add('threeisland-pm');
 			ftd.appendChild(tooltip);
-		}).catch(() => {});
+		}).catch(log);
 	}
 }
 
@@ -289,7 +296,7 @@ function watchRoom (node, spc) {
 		}
 		observerW.observe(chatNode, { childList: true });
 	}
-	else console.log(node, chatNode, spc);
+	else log(node, chatNode, spc);
 	return observerW;
 }
 
