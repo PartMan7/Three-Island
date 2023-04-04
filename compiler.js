@@ -13,6 +13,7 @@
 
 */
 
+const { execSync } = require('child_process');
 const fs = require('fs-extra');
 const path = require('path');
 const zip = require('zip-promise');
@@ -109,6 +110,9 @@ async function build () {
 	await fs.writeFile(path.join(scriptPath, 'greasemonkey.js'), `${header}\nconst WINDOW = unsafeWindow;\nif (!WINDOW) return;\n\n${ThreeIsland}`);
 	await fs.writeFile(path.join(scriptPath, 'tampermonkey.js'), `${header}\nconst WINDOW = unsafeWindow;\nif (!WINDOW) return;\n\n${ThreeIsland}`);
 	// Greasemonkey and Tampermonkey both use identical scripts
+
+	// On Linux, touch! This is used to ensure that the XPI file is the same.
+	if (process.platform === 'linux') execSync('find dist/firefox/unpacked -exec touch -t 196906090420 {} +', { cwd: __dirname });
 
 	// Create archives
 	await zip.folder(path.join(firefoxPath, 'unpacked'), path.join(firefoxPath, 'three-island.xpi'));

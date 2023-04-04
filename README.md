@@ -37,6 +37,8 @@ Three Island should now be running. If you wish to disable it, click the Greasem
 Three Island should now be running. If you wish to disable it, click the Tampermonkey extension, and click the green slider next to `Three Island`. You may need to reload the page to undo changes to loaded PokéPastes.
 
 
+**Note**: Since the build process uses `touch` to force timestamps, identical XPIs will have different checksums on non-Linux platforms. You can use another tool to check ZIP equality, like comp_zip.
+
 **Note**: While using Greasemonkey and Tampermonkey, please **do not** add scripts from sources you don't trust. These scripts have higher permissions than most browser tabs, and can cause significant damage if a malicious script is run. (Comments have been added explaining the code line-by-line if you're not sure about this script's validity.)
 
 **Note**: Since these last two are just scripts, they don't update themselves. If you have an older version of the script(s) and would like to update, just copy-paste the whole thing over the old code and save.
