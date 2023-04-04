@@ -116,8 +116,7 @@ async function build () {
 
 	// Create archives
 	await zip.folder(path.join(chromePath, 'unpacked'), path.join(chromePath, `three_island-${package.version}.zip`));
-	// Firefox is now published using web-ext
-	// await zip.folder(path.join(firefoxPath, 'unpacked'), path.join(firefoxPath, 'three-island.xpi'));
+	await zip.folder(path.join(firefoxPath, 'unpacked'), path.join(firefoxPath, `three_island-${package.version}.zip`));
 
 	const readme = await fs.readFile(path.join(__dirname, 'README.md'), 'utf8');
 	const [, month, date, year] = new Date().toDateString().split(' ');
