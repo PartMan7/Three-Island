@@ -115,8 +115,11 @@ async function build () {
 	if (process.platform === 'linux') execSync('find dist/firefox/unpacked -exec touch -t 196906090420 {} +', { cwd: __dirname });
 
 	// Create archives
-	await zip.folder(path.join(firefoxPath, 'unpacked'), path.join(firefoxPath, `three_island-${package.version}.xpi`));
-	await zip.folder(path.join(chromePath, 'unpacked'), path.join(chromePath, `three_island-${package.version}.zip`));
+	await zip.folder(path.join(firefoxPath, 'unpacked'), path.join(firefoxPath, 'three_island-latest.xpi'));
+	await zip.folder(path.join(chromePath, 'unpacked'), path.join(chromePath, 'three_island-latest.zip'));
+
+	await fs.copy(path.join(firefoxPath, 'three_island-latest.xpi'), path.join(firefoxPath, `three_island-${package.version}.xpi`));
+	await fs.copy(path.join(chromePath, 'three_island-latest.zip'), path.join(chromePath, `three_island-${package.version}.zip`));
 
 	const readme = await fs.readFile(path.join(__dirname, 'README.md'), 'utf8');
 	const [, month, date, year] = new Date().toDateString().split(' ');
