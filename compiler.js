@@ -15,6 +15,7 @@
 
 const fs = require('fs-extra');
 const path = require('path');
+const zip = require('zip-promise');
 
 async function build () {
 
@@ -103,6 +104,10 @@ async function build () {
 	await fs.writeFile(path.join(scriptPath, 'greasemonkey.js'), `${header}\nconst WINDOW = unsafeWindow;\nif (!WINDOW) return;\n\n${ThreeIsland}`);
 	await fs.writeFile(path.join(scriptPath, 'tampermonkey.js'), `${header}\nconst WINDOW = unsafeWindow;\nif (!WINDOW) return;\n\n${ThreeIsland}`);
 	// Greasemonkey and Tampermonkey both use identical scripts
+
+	// Create archives
+	await zip.folder(path.join(firefoxPath, 'unpacked'), path.join(firefoxPath, 'three-island.xpi'));
+	await zip.folder(path.join(chromePath, 'unpacked'), path.join(chromePath, 'three-island.zip'));
 
 }
 
