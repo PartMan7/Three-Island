@@ -87,6 +87,9 @@ For contributions, suggestions, questions, or just generic discussion, message m
 
 ### Version History
 
+#### 1.1.0
+Rewrote the entire HTML part to use HTML nodes instead of strings (which was what led to it being temporarily taken down from the Mozilla store). Also added in-page logging.
+
 #### 1.0.3
 Very minor tweaks to the code and comments. The architecture of the entire repository changed, which shouldn't affect the extension itself in any way.
 
