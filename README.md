@@ -89,6 +89,9 @@ For contributions, suggestions, questions, or just generic discussion, message m
 
 ### Version History
 
+#### 1.1.1
+Absolutely nothing changed; I just screwed up the upload to Mozilla Add-ons... well, technically now we're maintaining a list of all versions from this point so _something_ technically changed?
+
 #### 1.1.0
 Rewrote the entire HTML part to use HTML nodes instead of strings (which was what led to it being temporarily taken down from the Mozilla store). Also added in-page logging.
 

@@ -1,6 +1,6 @@
 {
 	"name": "Three Island",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"manifest_version": 3,
 	"description": "A Chrome extension for Pokémon Showdown that offers a seamless Poképaste experience.",
 	"homepage_url": "https://github.com/PartMan7/Three-Island",
