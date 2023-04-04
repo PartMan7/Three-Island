@@ -23,7 +23,7 @@ async function build () {
 		name: 'Three Island',
 		version: 0,
 		manifest_version: 0,
-		description: 'A {BROWSER} extension for Pokemon Showdown that offers a seamless Poképaste experience.',
+		description: 'A {BROWSER} extension for Pokémon Showdown that offers a seamless Poképaste experience.',
 		homepage_url: 'https://github.com/PartMan7/Three-Island',
 		icons: {
 			'48': 'icons/three-island-48.png',

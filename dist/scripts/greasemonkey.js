@@ -333,7 +333,7 @@ const observer = new MutationObserver(mutations => {
 		for (const node of mutation.removedNodes) {
 			if (!node.id.startsWith('room-')) continue;
 			const id = node.id.substr(5);
-			rooms[id]?.observer.disconnect();
+			rooms[id]?.observer?.disconnect();
 			delete rooms[id];
 		}
 	});

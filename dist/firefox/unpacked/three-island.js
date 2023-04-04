@@ -335,7 +335,7 @@ browser.storage.sync.get('enabled').then(val => {
 			for (const node of mutation.removedNodes) {
 				if (!node.id.startsWith('room-')) continue;
 				const id = node.id.substr(5);
-				rooms[id]?.observer.disconnect();
+				rooms[id]?.observer?.disconnect();
 				delete rooms[id];
 			}
 		});
