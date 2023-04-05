@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     Three Island
-// @version  1.1.1
+// @version  1.1.2
 // @grant    unsafeWindow
 // @author   PartMan
 // @match    http://play.pokemonshowdown.com/*
@@ -37,34 +37,32 @@ function exportTeam (team) {
 		if (team.indexOf('\n') >= 0) return team;
 		team = Storage.unpackTeam(team);
 	}
-	var text = '';
-	for (var i = 0; i < team.length; i++) {
-		var curSet = team[i];
-		if (curSet.name && curSet.name !== curSet.species) {
-			text += '' + curSet.name + ' (' + curSet.species + ')';
-		} else {
-			text += '' + curSet.species;
-		}
+	let text = '';
+	for (let i = 0; i < team.length; i++) {
+		const curSet = team[i];
+		if (!curSet.moves) curSet.moves = [];
+		if (curSet.name && curSet.name !== curSet.species) text += `${curSet.name} (${curSet.species})`;
+		else text += `${curSet.species}`;
 		if (curSet.gender === 'M') text += ' (M)';
 		if (curSet.gender === 'F') text += ' (F)';
 		if (curSet.item) {
-			text += ' @ ' + curSet.item;
+			text += ` @ ${curSet.item}`;
 		}
 		text += '  \n';
 		if (curSet.ability) {
-			text += 'Ability: ' + curSet.ability + '  \n';
+			text += `Ability: ${curSet.ability}  \n`;
 		}
 		if (curSet.level && curSet.level != 100) {
-			text += 'Level: ' + curSet.level + '  \n';
+			text += `Level: ${curSet.level}  \n`;
 		}
 		if (curSet.shiny) {
 			text += 'Shiny: Yes  \n';
 		}
 		if (typeof curSet.happiness === 'number' && curSet.happiness !== 255 && !isNaN(curSet.happiness)) {
-			text += 'Happiness: ' + curSet.happiness + '  \n';
+			text += `Happiness: ${curSet.happiness}  \n`;
 		}
 		if (curSet.pokeball) {
-			text += 'Pokeball: ' + curSet.pokeball + '  \n';
+			text += `Pokeball: ${curSet.pokeball}  \n`;
 		}
 		if (curSet.hpType) {
 			text += 'Hidden Power: ' + curSet.hpType + '  \n';
@@ -72,37 +70,37 @@ function exportTeam (team) {
 		if (curSet.gigantamax) {
 			text += 'Gigantamax: Yes  \n';
 		}
-		var first = true;
+		let firstEV = true;
 		if (curSet.evs) {
-			for (var j in BattleStatNames) {
-				if (!curSet.evs[j]) continue;
-				if (first) {
+			for (const stat in BattleStatNames) {
+				if (!curSet.evs[stat]) continue;
+				if (firstEV) {
 					text += 'EVs: ';
-					first = false;
+					firstEV = false;
 				} else {
 					text += ' / ';
 				}
-				text += '' + curSet.evs[j] + ' ' + BattleStatNames[j];
+				text += `${curSet.evs[stat]} ${BattleStatNames[stat]}`;
 			}
 		}
-		if (!first) {
+		if (!firstEV) {
 			text += '  \n';
 		}
 		if (curSet.nature) {
 			text += '' + curSet.nature + ' Nature' + '  \n';
 		}
-		var first = true;
+		let firstIV = true;
 		if (curSet.ivs) {
-			var defaultIvs = true;
-			var hpType = false;
-			for (var j = 0; j < curSet.moves.length; j++) {
-				var move = curSet.moves[j];
+			let defaultIvs = true;
+			let hpType = false;
+			for (let j = 0; j < curSet.moves.length; j++) {
+				const move = curSet.moves[j];
 				if (move.substr(0, 13) === 'Hidden Power ' && move.substr(0, 14) !== 'Hidden Power [') {
 					hpType = move.substr(13);
 					if (!Dex.types.isName(hpType)) {
 						continue;
 					}
-					for (var stat in BattleStatNames) {
+					for (const stat in BattleStatNames) {
 						if ((curSet.ivs[stat] === undefined ? 31 : curSet.ivs[stat]) !== (Dex.types.get(hpType).HPivs[stat] || 31)) {
 							defaultIvs = false;
 							break;
@@ -111,7 +109,7 @@ function exportTeam (team) {
 				}
 			}
 			if (defaultIvs && !hpType) {
-				for (var stat in BattleStatNames) {
+				for (const stat in BattleStatNames) {
 					if (curSet.ivs[stat] !== 31 && curSet.ivs[stat] !== undefined) {
 						defaultIvs = false;
 						break;
@@ -121,27 +119,25 @@ function exportTeam (team) {
 			if (!defaultIvs) {
 				for (var stat in BattleStatNames) {
 					if (typeof curSet.ivs[stat] === 'undefined' || isNaN(curSet.ivs[stat]) || curSet.ivs[stat] == 31) continue;
-					if (first) {
+					if (firstIV) {
 						text += 'IVs: ';
-						first = false;
+						firstIV = false;
 					} else {
 						text += ' / ';
 					}
-					text += '' + curSet.ivs[stat] + ' ' + BattleStatNames[stat];
+					text += `${curSet.ivs[stat]} ${BattleStatNames[stat]}`;
 				}
 			}
 		}
-		if (!first) {
+		if (!firstIV) {
 			text += '  \n';
 		}
 		if (curSet.moves) for (var j = 0; j < curSet.moves.length; j++) {
 			var move = curSet.moves[j];
 			if (move.substr(0, 13) === 'Hidden Power ') {
-				move = move.substr(0, 13) + '[' + move.substr(13) + ']';
+				move = `Hidden Power [${move.substr(13)}]`;
 			}
-			if (move) {
-				text += '- ' + move + '  \n';
-			}
+			if (move) text += `- ${move}  \n`;
 		}
 		text += '\n';
 	}
@@ -196,7 +192,7 @@ function fetchPaste (url) {
 			storedPastes[paste[1]] = { teamString, title: data.title, floatHTML: container, team, format };
 			resolve(paste[1]);
 		}).catch((err) => {
-			error(err);
+			log(`Three Island: Error in loading ${url} (this is completely safe)`, err);
 			reject(new Error('Paste link is invalid.'));
 		});
 	});
@@ -275,7 +271,7 @@ function runCheck (ftd, pm) {
 			ftd.classList.add('threeisland-link');
 			if (pm) ftd.classList.add('threeisland-pm');
 			ftd.appendChild(tooltip);
-		}).catch(log);
+		}).catch(err => log(`Three Island: `, err));
 	}
 }
 
@@ -312,7 +308,7 @@ function watchRoom (node, spc) {
 		}
 		observerW.observe(chatNode, { childList: true });
 	}
-	else log(node, chatNode, spc);
+	else log(`Three Island: ran into a weird chatroom`, node, chatNode, spc);
 	return observerW;
 }
 

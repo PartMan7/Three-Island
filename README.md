@@ -1,5 +1,5 @@
 # Three Island
-<img src="https://img.shields.io/github/package-json/v/PartMan7/Three-Island"/> <img src="https://img.shields.io/static/v1?label=Last%20published&message=4th%20Apr,%202023&color=blue"/> <img src="https://img.shields.io/amo/users/three-island?label=Firefox%20users"/> <img src="https://img.shields.io/chrome-web-store/users/glhggmffomgbggeobkijjhojkjopfpho?label=Chrome%20users"/>
+<img src="https://img.shields.io/github/package-json/v/PartMan7/Three-Island"/> <img src="https://img.shields.io/static/v1?label=Last%20published&message=5th%20Apr,%202023&color=blue"/> <img src="https://img.shields.io/amo/users/three-island?label=Firefox%20users"/> <img src="https://img.shields.io/chrome-web-store/users/glhggmffomgbggeobkijjhojkjopfpho?label=Chrome%20users"/>
 
 Three Island is a script/extension for Pokémon Showdown on various browsers that allows for a seamless PokéPaste experience.
 
@@ -87,7 +87,16 @@ The source files for Three Island are split across `popup` (for the extension di
 For contributions, suggestions, questions, or just generic discussion, message me on Discord at PartMan#7321 or contact me on [Smogon](https://www.smogon.com/forums/members/partman.470255/)/Showdown.
 
 
-### Version History
+### Changelog
+
+#### 1.1.2
+Bugfixes and dev QoL stuff!
+* Fixed a bug where previews weren't rendered for Poképastes that had Pokémon without moves.
+* Fixed the debug and error logging to show up in the page console instead of the extension console.
+* Added clarification messages to Three Island log messages to confirm their origin.
+* Rewrote exportTeams to be friendlier to work with and modify.
+* Extraneous recursive touch operation on Linux has been removed.
+* Added an `npm run watch` script to automatically rebuild the extension while working on the code.
 
 #### 1.1.1
 Absolutely nothing changed; I just screwed up the upload to Mozilla Add-ons... well, technically now we're maintaining a list of all versions from this point so _something_ technically changed?
