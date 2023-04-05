@@ -22,7 +22,7 @@ You can also test out upcoming versions (if they exist)! Download the `dist/fire
 You can install the extension from the Chrome Web Store at https://chrome.google.com/webstore/detail/three-island/glhggmffomgbggeobkijjhojkjopfpho. After installing, make sure to enable the extension by clicking the slider below the icon (which should look like [this](https://cdn.discordapp.com/attachments/762324232948023316/907888483098587177/Extension3I_aifgvhb.png)), and refresh the page!
 
 ### Chrome (and other browsers) Extension (preview)
-You can test out the most recent version of Three Island! Download the `dist/chrome/three_island-latest.zip` file to your device and unzip it. Then navigate to the `chrome://extensions` page (tested on Chrome and Opera), enable Developer mode (if disabled), and select `Load unpacked`. Here, select the unzipped directory (the `three-island` folder) - the extension should now be running!
+You can test out the most recent version of Three Island! Download the `dist/chrome/three_island-latest.zip` file to your device and unzip it. Then navigate to the `chrome://extensions` page (tested on Chrome and Opera), enable Developer mode (if disabled), and select `Load unpacked`. Here, select the unzipped directory (the `three_island-latest` folder) - the extension should now be running!
 
 ### Greasemonkey
 1. On Firefox, install the [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) extension.
