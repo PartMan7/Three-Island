@@ -99,8 +99,8 @@ async function build () {
 	const CSS = (await fs.readFile(path.join(__dirname, 'src', 'showdown.css'), 'utf8')).split('\n').map(line => line ? `\t${line}` : line).join('\n');
 	const ThreeIsland = (await fs.readFile(path.join(__dirname, 'src', 'three-island.js'), 'utf8')).replace(/{CSS}/g, CSS);
 
-	const firefoxScript = header + await fs.readFile(path.join(__dirname, 'src', 'firefox.js'), 'utf8');
-	const chromeScript = header + await fs.readFile(path.join(__dirname, 'src', 'chrome.js'), 'utf8');
+	const firefoxScript = await fs.readFile(path.join(__dirname, 'src', 'firefox.js'), 'utf8');
+	const chromeScript = await fs.readFile(path.join(__dirname, 'src', 'chrome.js'), 'utf8');
 
 	const indentedThreeIsland = ThreeIsland.split('\n').map(line => line ? `\t${line}` : line).join('\n');
 

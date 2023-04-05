@@ -1,15 +1,3 @@
-// ==UserScript==
-// @name     Three Island
-// @version  1.1.2
-// @grant    unsafeWindow
-// @author   PartMan
-// @match    http://play.pokemonshowdown.com/*
-// @match    https://play.pokemonshowdown.com/*
-// @match    http://*.psim.us/*
-// @match    https://*.psim.us/*
-// ==/UserScript==
-
-
 browser.storage.sync.get('enabled').then(val => {
 	if (val.enabled === '') return;
 

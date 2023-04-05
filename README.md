@@ -97,6 +97,7 @@ Bugfixes and dev QoL stuff!
 * Rewrote exportTeams to be friendlier to work with and modify.
 * Extraneous recursive touch operation on Linux has been removed.
 * Added an `npm run watch` script to automatically rebuild the extension while working on the code.
+* Removed the UserScript headers from the extension code for both Firefox and Chrome.
 
 #### 1.1.1
 Absolutely nothing changed; I just screwed up the upload to Mozilla Add-ons... well, technically now we're maintaining a list of all versions from this point so _something_ technically changed?
