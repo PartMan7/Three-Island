@@ -315,9 +315,11 @@ browser.storage.sync.get('enabled').then(val => {
 			if (details?.nodeName !== 'DETAILS') return; // A 'short' code (one that isn't expandable) can't have a team
 			return runCodeCheck(details, isPM);
 		}
-		const chat = msg.childNodes[msg.childNodes[0]?.nodeName === 'SMALL' ? 3 : 2];
+		let nodeIndex = msg.childNodes[0]?.nodeName === 'SMALL' ? 2 : 1;
+		if (msg.childNodes[nodeIndex].nodeName === '#text') nodeIndex++;
+		const chat = msg.childNodes[nodeIndex];
 		if (!chat) return;
-		if (chat.nodeName === 'EM') {
+		if (chat.nodeName === 'EM' || chat.classList.contains('message-pm')) {
 			// Check for the Poképaste links in the 'content' portion of the message
 			for (const ftd of chat.children) runCheck(ftd, isPM);
 		}

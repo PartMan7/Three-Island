@@ -89,6 +89,9 @@ For contributions, suggestions, questions, or just generic discussion, message m
 
 ### Changelog
 
+#### 1.2.1
+* Shows previews on messages seen in chat for those with the `Show PMs in chat` option enabled.
+
 #### 1.2.0
 * `!code` blocks are now supported!
 * The default format for imports is now \[Gen 9\].
