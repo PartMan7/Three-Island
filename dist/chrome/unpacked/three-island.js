@@ -7,13 +7,13 @@ function ThreeIsland () {
 	const { error, log } = WINDOW.console;
 	const storedPastes = {}; // Storing the data that we get from the Paste so we can display it
 
-	function subClone (aObject) {
+	function deepClone (aObject) {
 		if (!aObject) return aObject;
 
 		let v, bObject = WINDOW.Array.isArray(aObject) ? (new WINDOW.Array()) : (new WINDOW.Object());
 		for (const k in aObject) {
 			v = aObject[k];
-			bObject[k] = (typeof v === 'object') ? subClone(v) : v;
+			bObject[k] = (typeof v === 'object') ? deepClone(v) : v;
 		}
 
 		return bObject;
@@ -134,7 +134,7 @@ function ThreeIsland () {
 
 	function monHTML (mon) {
 		// The HTML for each individual sprite
-		mon = subClone(mon);
+		mon = deepClone(mon);
 		const arr = new WINDOW.Array();
 		arr.push(mon);
 		const mainNode = document.createElement('div');
@@ -169,15 +169,14 @@ function ThreeIsland () {
 			fetch(jsonLink).then(res => res.json()).then(data => {
 				const team = Storage.importTeam(data.paste);
 				const teamString = Storage.packTeam(team);
-				let floatHTML = '';
-				const container = document.createElement('span');
-				for (let i = 0; i < team.length && i < 24; i++) container.appendChild(monHTML(team[i])); // Access denied if we try to run Array#map
-				if (team.length > 24) container.appendChild(document.createTextNode(`... and ${team.length - 1} more`));
-				let format = 'gen8';
+				const pasteHTML = document.createElement('span');
+				for (let i = 0; i < team.length && i < 24; i++) pasteHTML.appendChild(monHTML(team[i])); // Access denied if we try to run Array#map
+				if (team.length > 24) pasteHTML.appendChild(document.createTextNode(`... and ${team.length - 1} more`));
+				let format = 'gen9';
 				const matched = data.notes.match(/[Ff]ormat *(?:[:-] *)?([a-z0-9]+)/);
 				if (matched) format = matched[1];
-				if (!format.startsWith('gen')) format = 'gen8' + format;
-				storedPastes[paste[1]] = { teamString, title: data.title, floatHTML: container, team, format };
+				if (!format.startsWith('gen')) format = 'gen9' + format;
+				storedPastes[paste[1]] = { teamString, title: data.title, pasteHTML, team, format };
 				resolve(paste[1]);
 			}).catch((err) => {
 				log(`Three Island: Error in loading ${url} (this is completely safe)`, err);
@@ -186,7 +185,20 @@ function ThreeIsland () {
 		});
 	}
 
-	function addTeam (url) {
+	function addTeam (data) {
+		const newTeam = new WINDOW.Object();
+		newTeam.name = data.title;
+		newTeam.format = data.format;
+		newTeam.team = data.teamString;
+		newTeam.capacity = data.team.length > 6 ? 24 : 6;
+		newTeam.folder = '';
+		newTeam.iconCache = Storage.packedTeamIcons(data.teamString);
+		Storage.teams.unshift(newTeam);
+		if (app.rooms.teambuilder) app.rooms.teambuilder.update();
+		Storage.saveTeams();
+	}
+
+	function loadPaste (url) {
 		// Adds the team to the storage + teambuilder
 		return new Promise((resolve, reject) => {
 			if (!url) return reject(new Error('No URL'));
@@ -195,19 +207,9 @@ function ThreeIsland () {
 			if (paste[1] === 'constructor') return reject(new Error('Well someone tried to screw me up'));
 			if (storedPastes[paste[1]]) return resolve(storedPastes[paste[1]]);
 			else return fetchPaste(url).then(data => resolve(storedPastes[data]));
-		}).catch(error).then(data => {
-			const newTeam = new WINDOW.Object();
-			newTeam.name = data.title;
-			newTeam.format = data.format;
-			newTeam.team = data.teamString;
-			newTeam.capacity = data.team.length > 6 ? 24 : 6;
-			newTeam.folder = '';
-			newTeam.iconCache = Storage.packedTeamIcons(data.teamString);
-			Storage.teams.unshift(newTeam);
-			if (app.rooms.teambuilder) app.rooms.teambuilder.update();
-			Storage.saveTeams();
-		});
+		}).then(data => addTeam(data)).catch(error);
 	}
+
 
 	// Watching rooms
 
@@ -223,7 +225,7 @@ function ThreeIsland () {
 		return true;
 	}
 
-	function runCheck (ftd, pm) {
+	function runCheck (ftd, isPM) {
 		// Format chat messages with valid PokePaste links
 		if (!ftd) return;
 		if (ftd.nodeName !== 'A') return;
@@ -232,16 +234,16 @@ function ThreeIsland () {
 			fetchPaste(link).then(ref => {
 				const data = storedPastes[ref];
 				const tooltip = document.createElement('span');
-				if (pm) tooltip.classList.add('threeisland-pm');
+				if (isPM) tooltip.classList.add('threeisland-pm');
 				const tooltipInner = document.createElement('center');
 				tooltipInner.classList.add('threeisland-images');
-				tooltipInner.appendChild(data.floatHTML.cloneNode(true));
+				tooltipInner.appendChild(data.pasteHTML.cloneNode(true));
 				tooltip.appendChild(tooltipInner);
 				tooltip.classList.add('threeisland-tooltip');
 				const button = document.createElement('button');
 				button.addEventListener('click', e => {
 					addTeam(link);
-					if (e.target.nodeName === 'BUTTON') e.preventDefault(); // Don't redirect if they clicked the 'Import button'
+					if (e.target.nodeName === 'BUTTON') e.preventDefault(); // Don't redirect if they clicked the Import button
 				});
 				tooltip.addEventListener('click', e => {
 					if (e.target.nodeName === 'PRE') {
@@ -257,9 +259,65 @@ function ThreeIsland () {
 				button.appendChild(document.createTextNode('Import'));
 				tooltip.appendChild(button);
 				ftd.classList.add('threeisland-link');
-				if (pm) ftd.classList.add('threeisland-pm');
+				if (isPM) ftd.classList.add('threeisland-pm');
 				ftd.appendChild(tooltip);
 			}).catch(err => log(`Three Island: `, err));
+		}
+	}
+
+	function runCodeCheck (details, isPM) {
+		// Format !code blocks with valid teams
+		if (!details) return;
+		// Generate the text content of the !code message
+		const summaryContent = details.childNodes[0].innerHTML;
+		const textContentWithTags = `${summaryContent}<br>${[...details.childNodes].slice(1).map(mapNodeToContent).join('')}`;
+		const textContent = textContentWithTags.replace(/<br>/g, '\n').replace(/<wbr>/g, '');
+		if (textContent.includes('Ability: ')) {
+			// Probably a set!
+			// We let the user decide because I'm lazy
+			try {
+				const team = Storage.importTeam(textContent);
+				const importButton = document.createElement('button');
+				importButton.addEventListener('click', e => {
+					addTeam({
+						title: `Untitled ${Storage.teams.length + 1}`,
+						teamString: Storage.packTeam(team),
+						team,
+						format: 'gen9'
+					});
+					if (e.target.nodeName === 'BUTTON') e.preventDefault(); // Don't expand/collapse if they clicked the Import button
+				});
+				importButton.innerText = 'Import';
+				details.childNodes[0].insertBefore(document.createElement('br'), details.childNodes[0].childNodes[0]);
+				details.childNodes[0].insertBefore(document.createElement('br'), details.childNodes[0].childNodes[0]);
+				details.childNodes[0].insertBefore(importButton, details.childNodes[0].childNodes[0]);
+			} catch (e) {}
+		}
+	}
+
+	function mapNodeToContent (node) {
+		// Function to convert HTML nodes into their text counterparts
+		if (node.nodeName === 'BR') return '\n';
+		if (node.nodeName === 'WBR') return '';
+		return node.textContent;
+	}
+
+	function checkMessageElement (msg, isPM) {
+		// Check the message to see if it has relevant 'nodes' (either a chat message with a link or a !code block)
+		if (!msg.classList.contains('chat')) return;
+		if (msg.childNodes[0]?.nodeName === 'DIV') {
+			// Check for a !code block
+			const infobox = msg.childNodes[0];
+			if (!infobox.classList.contains('infobox')) return;
+			const details = infobox.childNodes[0];
+			if (details?.nodeName !== 'DETAILS') return; // A 'short' code (one that isn't expandable) can't have a team
+			return runCodeCheck(details, isPM);
+		}
+		const chat = msg.childNodes[msg.childNodes[0]?.nodeName === 'SMALL' ? 3 : 2];
+		if (!chat) return;
+		if (chat.nodeName === 'EM') {
+			// Check for the Poképaste links in the 'content' portion of the message
+			for (const ftd of chat.children) runCheck(ftd, isPM);
 		}
 	}
 
@@ -267,12 +325,7 @@ function ThreeIsland () {
 		// Run the check function above on every messagebox that appears in chat
 		const observerW = new MutationObserver(mutations => {
 			mutations.forEach(mutation => {
-				for (const msg of mutation.addedNodes) {
-					if (!msg.classList.contains('chat')) continue;
-					const chat = msg.childNodes[msg.childNodes[0].nodeName === 'SMALL' ? 3 : 2];
-					if (!chat || chat.nodeName !== 'EM') continue;
-					for (const ftd of chat.children) runCheck(ftd);
-				}
+				for (const msg of mutation.addedNodes) checkMessageElement(msg);
 			});
 		});
 		let chatNode;
@@ -288,17 +341,12 @@ function ThreeIsland () {
 			default: chatNode = node.childNodes[1].childNodes[0];
 		}
 		if (chatNode) {
-			for (const msg of chatNode.children) {
-				if (!msg.classList.contains('chat')) continue;
-				const chat = msg.childNodes[msg.childNodes[0].nodeName === 'SMALL' ? 3 : 2];
-				if (!chat || chat.nodeName !== 'EM') continue;
-				for (const ftd of chat.children) runCheck(ftd);
-			}
+			for (const msg of chatNode.children) checkMessageElement(msg);
 			observerW.observe(chatNode, { childList: true });
-		}
-		else log(`Three Island: ran into a weird chatroom`, node, chatNode, spc);
+		} else log(`Three Island: ran into a weird chatroom`, node, chatNode, spc);
 		return observerW;
 	}
+
 
 	Object.entries(app.rooms).forEach(([room, data]) => {
 		// Load all rooms on connecting
@@ -339,22 +387,12 @@ function ThreeIsland () {
 				if (!user) continue;
 				const observerB = new MutationObserver(mutations => {
 					mutations.forEach(mutation => {
-						for (const msg of mutation.addedNodes) {
-							if (!msg.classList.contains('chat')) continue;
-							const chat = msg.childNodes[msg.childNodes[0].nodeName === 'SMALL' ? 3 : 2];
-							if (!chat || chat.nodeName !== 'EM') continue;
-							for (const ftd of chat.children) runCheck(ftd, true);
-						}
+						for (const msg of mutation.addedNodes) checkMessageElement(msg, true);
 					});
 				});
 				const chatNode = node.children[1]?.children[1];
 				if (chatNode) {
-					for (const msg of chatNode.children) {
-						if (!msg.classList.contains('chat')) continue;
-						const chat = msg.childNodes[msg.childNodes[0].nodeName === 'SMALL' ? 3 : 2];
-						if (!chat || chat.nodeName !== 'EM') continue;
-						for (const ftd of chat.children) runCheck(ftd, true);
-					}
+					for (const msg of chatNode.children) checkMessageElement(msg, true);
 					observerB.observe(chatNode, { childList: true });
 				}
 				pms[user] = { node, observer: observerB };

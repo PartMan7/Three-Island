@@ -1,5 +1,5 @@
 # Three Island
-<img src="https://img.shields.io/github/package-json/v/PartMan7/Three-Island"/> <img src="https://img.shields.io/static/v1?label=Last%20published&message=5th%20Apr,%202023&color=blue"/> <img src="https://img.shields.io/amo/users/three-island?label=Firefox%20users"/> <img src="https://img.shields.io/chrome-web-store/users/glhggmffomgbggeobkijjhojkjopfpho?label=Chrome%20users"/>
+<img src="https://img.shields.io/github/package-json/v/PartMan7/Three-Island"/> <img src="https://img.shields.io/static/v1?label=Last%20published&message=6th%20Apr,%202023&color=blue"/> <img src="https://img.shields.io/amo/users/three-island?label=Firefox%20users"/> <img src="https://img.shields.io/chrome-web-store/users/glhggmffomgbggeobkijjhojkjopfpho?label=Chrome%20users"/>
 
 Three Island is a script/extension for Pokémon Showdown on various browsers that allows for a seamless PokéPaste experience.
 
@@ -88,6 +88,11 @@ For contributions, suggestions, questions, or just generic discussion, message m
 
 
 ### Changelog
+
+#### 1.2.0
+* `!code` blocks are now supported!
+* The default format for imports is now \[Gen 9\].
+* Simplified the message-block parsing interface.
 
 #### 1.1.2
 Bugfixes and dev QoL stuff!
