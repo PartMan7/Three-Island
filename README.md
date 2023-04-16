@@ -89,7 +89,7 @@ For contributions, suggestions, questions, or just generic discussion, message m
 
 ### Changelog
 
-### 1.3.1
+#### 1.3.1
 * Fixed the import bug (where if you tried to import a team, it would instead open a new tab for the Paste).
 
 ### 1.3.0
@@ -100,7 +100,7 @@ For contributions, suggestions, questions, or just generic discussion, message m
 #### 1.2.1
 * Shows previews on messages seen in chat for those with the `Show PMs in chat` option enabled.
 
-#### 1.2.0
+### 1.2.0
 * `!code` blocks are now supported!
 * The default format for imports is now \[Gen 9\].
 * Simplified the message-block parsing interface.
@@ -134,5 +134,5 @@ Minor bugfixes:
 Minor QoL change:
 * The extension defaults to 'enabled' instead of 'disabled'
 
-#### 1.0.0
+### 1.0.0
 Original release!
