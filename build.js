@@ -118,11 +118,6 @@ async function build () {
 	await fs.copy(path.join(firefoxPath, 'three_island-latest.xpi'), path.join(firefoxPath, `three_island-${package.version}.xpi`));
 	await fs.copy(path.join(chromePath, 'three_island-latest.zip'), path.join(chromePath, `three_island-${package.version}.zip`));
 
-	const readme = await fs.readFile(path.join(__dirname, 'README.md'), 'utf8');
-	const [, month, date, year] = new Date().toDateString().split(' ');
-	const dateStr = `${~~date}${{ '1': 'st', '2': 'nd', '3': 'rd' }[date.slice(-1)] || 'th'} ${month}, ${year}`;
-	await fs.writeFile(path.join(__dirname, 'README.md'), readme.replace(/(?<=%20published&message=).*?(?=&)/g, dateStr.replace(/ /g, '%20')));
-
 }
 
 const initTime = process.uptime();
