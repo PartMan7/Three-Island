@@ -8,7 +8,7 @@ Three Island is a script/extension for Pokémon Showdown on various browsers tha
 * PokéPaste previews without actually opening the PokéPaste
 * Set details on further hovering
 * Copy-with-a-click on set details
-* Insta-import buttons that allow you to import a Pokepaste to your teambuidler in one click
+* Insta-import buttons that allow you to import a Pokepaste to your teambuilder in one click
 
 ## Installation
 
