@@ -1,5 +1,5 @@
 # Three Island
-<img src="https://img.shields.io/github/package-json/v/PartMan7/Three-Island"/> <img src="https://img.shields.io/static/v1?label=Last%20published&message=6th%20Apr,%202023&color=blue"/> <img src="https://img.shields.io/amo/users/three-island?label=Firefox%20users"/> <img src="https://img.shields.io/chrome-web-store/users/glhggmffomgbggeobkijjhojkjopfpho?label=Chrome%20users"/>
+<img src="https://img.shields.io/github/package-json/v/PartMan7/Three-Island"/> <img src="https://img.shields.io/static/v1?label=Last%20published&message=16th%20Apr,%202023&color=blue"/> <img src="https://img.shields.io/amo/users/three-island?label=Firefox%20users"/> <img src="https://img.shields.io/chrome-web-store/users/glhggmffomgbggeobkijjhojkjopfpho?label=Chrome%20users"/>
 
 Three Island is a script/extension for Pokémon Showdown on various browsers that allows for a seamless PokéPaste experience.
 
@@ -88,6 +88,11 @@ For contributions, suggestions, questions, or just generic discussion, message m
 
 
 ### Changelog
+
+### 1.3.0
+* Shows previews for the Tera type now (only if explicitly declared)!
+* Tera types are now listed in the second (textual info) hover and will be copied along with the set.
+* Fixed a minor error shown in console if rooms couldn't be loaded.
 
 #### 1.2.1
 * Shows previews on messages seen in chat for those with the `Show PMs in chat` option enabled.

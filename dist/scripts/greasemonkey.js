@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     Three Island
-// @version  1.2.1
+// @version  1.3.0
 // @grant    unsafeWindow
 // @author   PartMan
 // @match    http://play.pokemonshowdown.com/*
@@ -69,6 +69,9 @@ function exportTeam (team) {
 		}
 		if (curSet.gigantamax) {
 			text += 'Gigantamax: Yes  \n';
+		}
+		if (curSet.teraType) {
+			text += `Tera Type: ${curSet.teraType}  \n`;
 		}
 		let firstEV = true;
 		if (curSet.evs) {
@@ -163,6 +166,15 @@ function monHTML (mon) {
 	const preNode = document.createElement('pre');
 	preNode.innerText = exportTeam(arr);
 	exportNode.appendChild(preNode);
+	if (mon.teraType) {
+		const teraIcon = document.createElement('span');
+		const teraImage = document.createElement('img');
+		teraImage.setAttribute('src', `https://play.pokemonshowdown.com/sprites/types/Tera${mon.teraType}.png`);
+		teraImage.style.cssText = 'height:15px;width:15px';
+		teraIcon.appendChild(teraImage);
+		teraIcon.style.cssText = 'position:absolute;top:0;left:0';
+		mainNode.appendChild(teraIcon);
+	}
 	mainNode.appendChild(monIcon);
 	mainNode.appendChild(itemIcon);
 	mainNode.appendChild(exportNode);
@@ -376,6 +388,7 @@ const observer = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
 		for (const node of mutation.addedNodes) {
 			const roomRoom = node.id;
+			if (roomRoom) continue; // Room couldn't be loaded
 			if (!roomRoom.startsWith('room-')) continue;
 			const room = roomRoom.substr(5);
 			const val = validRoom(room);

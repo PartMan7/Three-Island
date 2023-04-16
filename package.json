@@ -1,6 +1,6 @@
 {
   "name": "three-island",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "Three Island is a script/extension for Pokémon Showdown on various browsers that allows for a seamless PokéPaste experience.",
   "main": "compiler.js",
   "scripts": {
