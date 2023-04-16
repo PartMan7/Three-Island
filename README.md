@@ -48,7 +48,6 @@ The source files for Three Island are split across `popup` (for the extension di
 
 ## Planned Features
 * Being able to import multiple teams at the same time
-* Supporting imports from `!code` blocks that contain teams
 
 ## Frequently Asked Questions
 
