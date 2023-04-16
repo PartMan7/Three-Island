@@ -120,7 +120,7 @@ async function build () {
 
 	const readme = await fs.readFile(path.join(__dirname, 'README.md'), 'utf8');
 	const [, month, date, year] = new Date().toDateString().split(' ');
-	const dateStr = `${~~date}${{ '1': 'st', '2': 'nd' }[date.slice(-1)] || 'th'} ${month}, ${year}`;
+	const dateStr = `${~~date}${{ '1': 'st', '2': 'nd', '3': 'rd' }[date.slice(-1)] || 'th'} ${month}, ${year}`;
 	await fs.writeFile(path.join(__dirname, 'README.md'), readme.replace(/(?<=%20published&message=).*?(?=&)/g, dateStr.replace(/ /g, '%20')));
 
 }
