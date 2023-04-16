@@ -89,6 +89,9 @@ For contributions, suggestions, questions, or just generic discussion, message m
 
 ### Changelog
 
+### 1.3.1
+* Fixed the import bug (where if you tried to import a team, it would instead open a new tab for the Paste).
+
 ### 1.3.0
 * Shows previews for the Tera type now (only if explicitly declared)!
 * Tera types are now listed in the second (textual info) hover and will be copied along with the set.
