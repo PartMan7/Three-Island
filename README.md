@@ -48,6 +48,7 @@ The source files for Three Island are split across `popup` (for the extension di
 
 ## Planned Features
 * Being able to import multiple teams at the same time
+* Importing from Pastebin links (and other paste services)
 
 ## Frequently Asked Questions
 
