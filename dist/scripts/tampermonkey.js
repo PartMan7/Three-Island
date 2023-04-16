@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     Three Island
-// @version  1.3.0
+// @version  1.3.1
 // @grant    unsafeWindow
 // @author   PartMan
 // @match    http://play.pokemonshowdown.com/*
@@ -266,7 +266,7 @@ function runCheck (ftd, isPM) {
 			tooltip.classList.add('threeisland-tooltip');
 			const button = document.createElement('button');
 			button.addEventListener('click', e => {
-				addTeam(link);
+				loadPaste(link);
 				if (e.target.nodeName === 'BUTTON') e.preventDefault(); // Don't redirect if they clicked the Import button
 			});
 			tooltip.addEventListener('click', e => {

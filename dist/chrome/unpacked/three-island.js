@@ -254,7 +254,7 @@ function ThreeIsland () {
 				tooltip.classList.add('threeisland-tooltip');
 				const button = document.createElement('button');
 				button.addEventListener('click', e => {
-					addTeam(link);
+					loadPaste(link);
 					if (e.target.nodeName === 'BUTTON') e.preventDefault(); // Don't redirect if they clicked the Import button
 				});
 				tooltip.addEventListener('click', e => {
