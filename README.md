@@ -90,6 +90,11 @@ For contributions, suggestions, questions, or just generic discussion, message m
 
 ### Changelog
 
+#### 1.4.2
+* Previews are now shown on formatted text, including greentext, bold, and italics (and any combination thereof)!
+* Moved item icons back in front of the Pokémon icons.
+* Added more documentation to the code.
+
 #### 1.4.1
 * Added the option to toggle `!code` imports.
 * Tweaked the UI margins.
@@ -101,7 +106,7 @@ For contributions, suggestions, questions, or just generic discussion, message m
 * Fixed a bug with copied sets having no linebreaks on Chrome.
 
 #### 1.3.1
-* Fixed the import bug (where if you tried to import a team, it would instead open a new tab for the Paste).
+* Fixed a bug in imports (where if you tried to import a team, it would instead open a new tab for the Paste).
 
 ### 1.3.0
 * Shows previews for the Tera type now (only if explicitly declared)!

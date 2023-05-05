@@ -22,6 +22,8 @@ function ThreeIsland () {
 	}
 
 	function exportTeam (team) {
+		// Copied from the official client's `Dex.exportTeam` function
+		// The only difference is that this doesn't throw errors if the set has invalid Hidden Powers
 		if (!team) return '';
 		if (typeof team === 'string') {
 			if (team.indexOf('\n') >= 0) return team;
@@ -148,12 +150,6 @@ function ThreeIsland () {
 		const monIcon = document.createElement('span');
 		monIcon.style.cssText = `${Dex.getPokemonIcon(mon.species)};position:absolute;top:0;left:0`;
 		monIcon.classList.add('picon');
-		if (OPTIONS['show-item'] === '1') {
-			const itemIcon = document.createElement('span');
-			itemIcon.style.cssText = `${Dex.getItemIcon(mon.item)};transform:scale(0.8);position:absolute;top:15px;left:15px`;
-			itemIcon.classList.add('itemicon');
-			mainNode.appendChild(itemIcon);
-		}
 		if (mon.teraType) {
 			const species = Dex.species.get(mon.species);
 			const nonStdTera = !species || species.types[0] !== mon.teraType;
@@ -167,7 +163,14 @@ function ThreeIsland () {
 				mainNode.appendChild(teraIcon);
 			}
 		}
-		mainNode.appendChild(monIcon); // This is at the end so that the Pokémon is on top
+		mainNode.appendChild(monIcon); // This is after the Tera icon so that the Pokémon is on top
+		if (OPTIONS['show-item'] === '1') {
+			// And the item icon is above both of them (though it can only overlap the Pokémon, not the Tera icon)
+			const itemIcon = document.createElement('span');
+			itemIcon.style.cssText = `${Dex.getItemIcon(mon.item)};transform:scale(0.8);position:absolute;top:15px;left:15px`;
+			itemIcon.classList.add('itemicon');
+			mainNode.appendChild(itemIcon);
+		}
 		const exportNode = document.createElement('span');
 		exportNode.classList.add('threeisland-tooltip');
 		const preNode = document.createElement('pre');
@@ -206,6 +209,7 @@ function ThreeIsland () {
 	}
 
 	function addTeam (data) {
+		// Store the team in the Teambuilder
 		const newTeam = new WINDOW.Object();
 		newTeam.name = data.title;
 		newTeam.format = data.format;
@@ -248,7 +252,8 @@ function ThreeIsland () {
 	function runCheck (ftd, isPM) {
 		// Format chat messages with valid PokePaste links
 		if (!ftd) return;
-		if (ftd.nodeName !== 'A') return;
+		if (ftd.nodeName !== 'A') return [...ftd.childNodes].forEach(node => runCheck(node, isPM));
+		// If the node isn't a link, check if any of its children are links (eg: italicized text)
 		if (/^(?:https?:\/\/)?pokepast\.es\/[a-zA-Z0-9]+$/.test(ftd.href)) {
 			const link = ftd.href;
 			fetchPaste(link).then(ref => {
