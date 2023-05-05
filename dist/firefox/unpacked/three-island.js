@@ -2,7 +2,7 @@
 	const WINDOW = window.wrappedJSObject;
 	if (!WINDOW) return; // This only works in Firefox
 
-	const ids = ['enabled', 'show-item', 'show-tera'];
+	const ids = ['enabled', 'show-item', 'show-tera', 'import-code'];
 	const entries = await Promise.all(ids.map(data => browser.storage.sync.get(data)));
 	const OPTIONS = entries.reduce((a, b) => ({ ...a, ...b }), {});
 
@@ -331,6 +331,7 @@
 		if (!msg.classList.contains('chat')) return;
 		if (msg.childNodes[0]?.nodeName === 'DIV') {
 			// Check for a !code block
+			if (OPTIONS['import-code'] !== '1') return;
 			const infobox = msg.childNodes[0];
 			if (!infobox.classList.contains('infobox')) return;
 			const details = infobox.childNodes[0];

@@ -26,6 +26,15 @@ const opts = [{
 	},
 	set: 'show-tera',
 	std: '1'
+}, {
+	id: 'code-opt',
+	states: ['0', '1'],
+	stateLabels: {
+		'0': 'Imports from code disabled',
+		'1': 'Imports from code enabled'
+	},
+	set: 'import-code',
+	std: '1'
 }];
 
 const elements = {};

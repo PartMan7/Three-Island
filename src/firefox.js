@@ -2,7 +2,7 @@
 	const WINDOW = window.wrappedJSObject;
 	if (!WINDOW) return; // This only works in Firefox
 
-	const ids = ['enabled', 'show-item', 'show-tera'];
+	const ids = ['enabled', 'show-item', 'show-tera', 'import-code'];
 	const entries = await Promise.all(ids.map(data => browser.storage.sync.get(data)));
 	const OPTIONS = entries.reduce((a, b) => ({ ...a, ...b }), {});
 

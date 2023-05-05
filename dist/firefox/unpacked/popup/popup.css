@@ -1,5 +1,5 @@
 .smaller-option {
-	margin: 10px;
+	margin: 5px;
 }
 
 .smaller-option span {
@@ -82,4 +82,10 @@ body {
 	background-color: #484848;
 	color: white;
 	vertical-align: middle;
+	font-size: 16px;
+}
+
+center {
+	padding: 10px 30px;
+	min-width: 150px;
 }

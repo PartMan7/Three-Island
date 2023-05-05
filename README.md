@@ -90,6 +90,10 @@ For contributions, suggestions, questions, or just generic discussion, message m
 
 ### Changelog
 
+#### 1.4.1
+* Added the option to toggle `!code` imports.
+* Tweaked the UI margins.
+
 ### 1.4.0
 * Added options to the popout to let users choose how they want previews to render!
 * Currently supports item icons (yes/no) and Tera types (yes/no/non-default).

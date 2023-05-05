@@ -321,6 +321,7 @@ function checkMessageElement (msg, isPM) {
 	if (!msg.classList.contains('chat')) return;
 	if (msg.childNodes[0]?.nodeName === 'DIV') {
 		// Check for a !code block
+		if (OPTIONS['import-code'] !== '1') return;
 		const infobox = msg.childNodes[0];
 		if (!infobox.classList.contains('infobox')) return;
 		const details = infobox.childNodes[0];

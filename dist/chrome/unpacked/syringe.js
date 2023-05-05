@@ -5,7 +5,7 @@ chrome.storage.sync.get('enabled').then(async val => {
 	s.onload = function () {
 		this.remove();
 	};
-	const ids = ['enabled', 'show-item', 'show-tera'];
+	const ids = ['enabled', 'show-item', 'show-tera', 'import-code'];
 	const entries = await Promise.all(ids.map(data => chrome.storage.sync.get(data)));
 	const state = entries.reduce((a, b) => ({ ...a, ...b }), {});
 	const root = (document.head || document.documentElement);
