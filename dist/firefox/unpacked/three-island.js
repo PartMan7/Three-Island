@@ -1,8 +1,12 @@
-browser.storage.sync.get('enabled').then(val => {
-	if (val.enabled === '') return;
-
+((async () => {
 	const WINDOW = window.wrappedJSObject;
 	if (!WINDOW) return; // This only works in Firefox
+
+	const ids = ['enabled', 'show-item', 'show-tera'];
+	const entries = await Promise.all(ids.map(data => browser.storage.sync.get(data)));
+	const OPTIONS = entries.reduce((a, b) => ({ ...a, ...b }), {});
+
+	if (OPTIONS.enabled !== '1') return;
 
 	WINDOW.R3I = true;
 	const { app, Dex, Storage, BattleStatNames } = WINDOW;
@@ -148,25 +152,31 @@ browser.storage.sync.get('enabled').then(val => {
 		const monIcon = document.createElement('span');
 		monIcon.style.cssText = `${Dex.getPokemonIcon(mon.species)};position:absolute;top:0;left:0`;
 		monIcon.classList.add('picon');
-		const itemIcon = document.createElement('span');
-		itemIcon.style.cssText = `${Dex.getItemIcon(mon.item)};transform:scale(0.8);position:absolute;top:15px;left:15px`;
-		itemIcon.classList.add('itemicon');
+		if (OPTIONS['show-item'] === '1') {
+			const itemIcon = document.createElement('span');
+			itemIcon.style.cssText = `${Dex.getItemIcon(mon.item)};transform:scale(0.8);position:absolute;top:15px;left:15px`;
+			itemIcon.classList.add('itemicon');
+			mainNode.appendChild(itemIcon);
+		}
+		if (mon.teraType) {
+			const species = Dex.species.get(mon.species);
+			const nonStdTera = !species || species.types[0] !== mon.teraType;
+			if (OPTIONS['show-tera'] === '1' || (OPTIONS['show-tera'] === '2' && nonStdTera)) {
+				const teraIcon = document.createElement('span');
+				const teraImage = document.createElement('img');
+				teraImage.setAttribute('src', `https://play.pokemonshowdown.com/sprites/types/Tera${mon.teraType}.png`);
+				teraImage.style.cssText = 'height:15px;width:15px';
+				teraIcon.appendChild(teraImage);
+				teraIcon.style.cssText = 'position:absolute;top:0;left:0';
+				mainNode.appendChild(teraIcon);
+			}
+		}
+		mainNode.appendChild(monIcon); // This is at the end so that the Pokémon is on top
 		const exportNode = document.createElement('span');
 		exportNode.classList.add('threeisland-tooltip');
 		const preNode = document.createElement('pre');
 		preNode.innerText = exportTeam(arr);
 		exportNode.appendChild(preNode);
-		if (mon.teraType) {
-			const teraIcon = document.createElement('span');
-			const teraImage = document.createElement('img');
-			teraImage.setAttribute('src', `https://play.pokemonshowdown.com/sprites/types/Tera${mon.teraType}.png`);
-			teraImage.style.cssText = 'height:15px;width:15px';
-			teraIcon.appendChild(teraImage);
-			teraIcon.style.cssText = 'position:absolute;top:0;left:0';
-			mainNode.appendChild(teraIcon);
-		}
-		mainNode.appendChild(monIcon);
-		mainNode.appendChild(itemIcon);
 		mainNode.appendChild(exportNode);
 		return mainNode;
 	}
@@ -263,7 +273,7 @@ browser.storage.sync.get('enabled').then(val => {
 					if (e.target.nodeName === 'PRE') {
 						// They clicked the set; we copy this to clipboard!
 						e.preventDefault();
-						const set = e.target.textContent;
+						const set = e.target.innerText;
 						const dark = document.getElementsByTagName('html')[0]?.classList.contains('dark');
 						WINDOW.navigator?.clipboard?.writeText(set)?.catch(() => {});
 						e.target.style['background-color'] = dark ? '#3d454e' : '#c1c8c8';
@@ -538,4 +548,4 @@ browser.storage.sync.get('enabled').then(val => {
 
 	addCSS(CSS);
 
-}).catch(console.error);
+})()).catch(console.error);

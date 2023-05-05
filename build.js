@@ -83,11 +83,8 @@ async function build () {
 	await fs.copy(path.join(__dirname, 'popup'), path.join(firefoxPath, 'unpacked', 'popup'));
 	await fs.copy(path.join(__dirname, 'popup'), path.join(chromePath, 'unpacked', 'popup'));
 
-	await fs.move(path.join(firefoxPath, 'unpacked', 'popup', 'popup-firefox.js'), path.join(firefoxPath, 'unpacked', 'popup', 'popup.js'));
-	await fs.remove(path.join(firefoxPath, 'unpacked', 'popup', 'popup-chrome.js'));
-
-	await fs.move(path.join(chromePath, 'unpacked', 'popup', 'popup-chrome.js'), path.join(chromePath, 'unpacked', 'popup', 'popup.js'));
-	await fs.remove(path.join(chromePath, 'unpacked', 'popup', 'popup-firefox.js'));
+	const popupJS = await fs.readFile(path.join(chromePath, 'unpacked', 'popup', 'popup.js'), 'utf8');
+	await fs.writeFile(path.join(chromePath, 'unpacked', 'popup', 'popup.js'), popupJS.replace(/browser/g, 'chrome'));
 
 	await fs.writeFile(path.join(firefoxPath, 'unpacked', 'manifest.json'), JSON.stringify(firefoxManifest, null, '\t') + '\n');
 	await fs.writeFile(path.join(chromePath, 'unpacked', 'manifest.json'), JSON.stringify(chromeManifest, null, '\t') + '\n');
@@ -101,14 +98,15 @@ async function build () {
 
 	const firefoxScript = await fs.readFile(path.join(__dirname, 'src', 'firefox.js'), 'utf8');
 	const chromeScript = await fs.readFile(path.join(__dirname, 'src', 'chrome.js'), 'utf8');
+	const monkeyScript = await fs.readFile(path.join(__dirname, 'src', 'monkey.js'), 'utf8');
 
 	const indentedThreeIsland = ThreeIsland.split('\n').map(line => line ? `\t${line}` : line).join('\n');
 
 	await fs.writeFile(path.join(firefoxPath, 'unpacked', 'three-island.js'), firefoxScript.replace(/{THREE-ISLAND}/g, indentedThreeIsland));
 	await fs.writeFile(path.join(chromePath, 'unpacked', 'three-island.js'), chromeScript.replace(/{THREE-ISLAND}/g, indentedThreeIsland));
 
-	await fs.writeFile(path.join(scriptPath, 'greasemonkey.js'), `${header}\nconst WINDOW = unsafeWindow;\nif (!WINDOW) return;\n\n${ThreeIsland}`);
-	await fs.writeFile(path.join(scriptPath, 'tampermonkey.js'), `${header}\nconst WINDOW = unsafeWindow;\nif (!WINDOW) return;\n\n${ThreeIsland}`);
+	await fs.writeFile(path.join(scriptPath, 'greasemonkey.js'), `${header}\n${monkeyScript}\n${ThreeIsland}`);
+	await fs.writeFile(path.join(scriptPath, 'tampermonkey.js'), `${header}\n${monkeyScript}\n${ThreeIsland}`);
 	// Greasemonkey and Tampermonkey both use identical scripts
 
 	// Create archives
@@ -123,6 +121,7 @@ async function build () {
 const initTime = process.uptime();
 build().then(() => {
 	console.log(`Completed build in ${process.uptime() - initTime}s`);
+	console.log(`at ${new Date().toString()}`);
 }).catch(err => {
 	console.log(`Fatal error during build:`);
 	console.error(err);

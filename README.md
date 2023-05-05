@@ -49,6 +49,7 @@ The source files for Three Island are split across `popup` (for the extension di
 ## Planned Features
 * Being able to import multiple teams at the same time
 * Importing from Pastebin links (and other paste services)
+* Previews are to be shown for formatted text (in greentext blocks (`> link`) and italics/bold (`__link__ or **link**`)).
 
 ## Frequently Asked Questions
 
@@ -89,6 +90,12 @@ For contributions, suggestions, questions, or just generic discussion, message m
 
 ### Changelog
 
+### 1.4.0
+* Added options to the popout to let users choose how they want previews to render!
+* Currently supports item icons (yes/no) and Tera types (yes/no/non-default).
+* Sources for `popup-firefox.js` and `popup-chrome.js` have been combined in the same file.
+* Fixed a bug with copied sets having no linebreaks on Chrome.
+
 #### 1.3.1
 * Fixed the import bug (where if you tried to import a team, it would instead open a new tab for the Paste).
 
@@ -116,7 +123,7 @@ Bugfixes and dev QoL stuff!
 * Removed the UserScript headers from the extension code for both Firefox and Chrome.
 
 #### 1.1.1
-Absolutely nothing changed; I just screwed up the upload to Mozilla Add-ons... well, technically now we're maintaining a list of all versions from this point so _something_ technically changed?
+Absolutely nothing changed; I just screwed up the upload to Mozilla Add-ons... well, we're now maintaining a list of all versions from this point so _something_ technically changed?
 
 ### 1.1.0
 Rewrote the entire HTML part to use HTML nodes instead of strings (which was what led to it being temporarily taken down from the Mozilla store). Also added in-page logging.
