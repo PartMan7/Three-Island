@@ -13,13 +13,13 @@ Three Island is a script/extension for Pokémon Showdown on various browsers tha
 ## Installation
 
 ### Firefox Extension
-You can install the extension from addons.mozilla.org at https://addons.mozilla.org/en-US/firefox/addon/three-island/. After installing, make sure to enable the extension by clicking the slider below the icon (which should look like [this](https://cdn.discordapp.com/attachments/762324232948023316/907888483098587177/Extension3I_aifgvhb.png)), and refresh the page!
+You can install the extension from addons.mozilla.org at https://addons.mozilla.org/en-US/firefox/addon/three-island/. After installing, make sure the extension is enabled by clicking the icon on the toolbar (which should look like [this](https://media.discordapp.net/attachments/762324232948023316/1103968241832960092/image.png)), and refresh the page!
 
 ### Firefox Extension (preview)
 You can also test out upcoming versions (if they exist)! Download the `dist/firefox/three_island-latest.xpi` file to your device, open Firefox, visit the Debugging page (about:debugging) (Firefox-only), click `This Firefox`, and hit `Load Temporary Add-on`. Here, select the XPI file you just downloaded, and voíla! The extension should be running in this session.
 
 ### Chrome Web Store Extension
-You can install the extension from the Chrome Web Store at https://chrome.google.com/webstore/detail/three-island/glhggmffomgbggeobkijjhojkjopfpho. After installing, make sure to enable the extension by clicking the slider below the icon (which should look like [this](https://cdn.discordapp.com/attachments/762324232948023316/907888483098587177/Extension3I_aifgvhb.png)), and refresh the page!
+You can install the extension from the Chrome Web Store at https://chrome.google.com/webstore/detail/three-island/glhggmffomgbggeobkijjhojkjopfpho. After installing, make sure the extension is enabled by clicking the icon on the toolbar (which should look like [this](https://media.discordapp.net/attachments/762324232948023316/1103968241832960092/image.png)), and refresh the page!
 
 ### Chrome (and other browsers) Extension (preview)
 You can test out the most recent version of Three Island! Download the `dist/chrome/three_island-latest.zip` file to your device and unzip it. Then navigate to the `chrome://extensions` page (tested on Chrome and Opera), enable Developer mode (if disabled), and select `Load unpacked`. Here, select the unzipped directory (the `three_island-latest` folder) - the extension should now be running!
@@ -31,7 +31,7 @@ You can test out the most recent version of Three Island! Download the `dist/chr
 Three Island should now be running. If you wish to disable it, click the Greasemonkey extension, click `Three Island`, and toggle off the `Enabled` field. You may need to reload the page to undo changes to loaded PokéPastes.
 
 ### Tampermonkey
-1. On your browser, install the [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en) extension from the Google Web Store.
+1. On your browser, install the [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) extension from the Google Web Store.
 2. Once you've added it, click on the extension, click on `Create a new script...`, and paste in the `dist/scripts/tampermonkey.js` file from this repository.
 3. Reload your Showdown tab.
 Three Island should now be running. If you wish to disable it, click the Tampermonkey extension, and click the green slider next to `Three Island`. You may need to reload the page to undo changes to loaded PokéPastes.
@@ -42,6 +42,8 @@ Three Island should now be running. If you wish to disable it, click the Tamperm
 **Note**: While using Greasemonkey and Tampermonkey, please **do not** add scripts from sources you don't trust. These scripts have higher permissions than most browser tabs, and can cause significant damage if a malicious script is run. (Comments have been added explaining the code line-by-line if you're not sure about this script's validity.)
 
 **Note**: Since these last two are just scripts, they don't update themselves. If you have an older version of the script(s) and would like to update, just copy-paste the whole thing over the old code and save.
+
+**Note**: To change Three Island settings in the Greasmonkey/Tampermonkey scripts, modify the values in the OPTIONS variable.
 
 ## Contributing
 The source files for Three Island are split across `popup` (for the extension display) and `src` (for the injection scripts and actual handlers). To build the extension, run `npm build` (or `node compiler.js`). Pull requests to fix bugs or introduce relevant features are improved, as are issues with detailed explanations.
