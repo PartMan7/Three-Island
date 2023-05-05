@@ -85,7 +85,7 @@ The source files for Three Island are split across `popup` (for the extension di
 -----
 
 ### Contributions
-For contributions, suggestions, questions, or just generic discussion, message me on Discord at PartMan#7321 or contact me on [Smogon](https://www.smogon.com/forums/members/partman.470255/)/Showdown.
+For contributions, suggestions, questions, or just generic discussion, message me on Discord at PartMan#7321 or contact me on [Smogon](https://www.smogon.com/forums/members/partman.470255/)/Showdown. You can also drop a post on the [Smogon thread for Three Island](https://www.smogon.com/forums/threads/three-island-an-extension-for-a-seamless-pokepaste-experience.3692887/).
 
 
 ### Changelog
