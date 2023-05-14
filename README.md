@@ -92,6 +92,9 @@ For contributions, suggestions, questions, or just generic discussion, message m
 
 ### Changelog
 
+### 1.4.3
+* Fixed a bug with pastes not being rendered on joined rooms.
+
 #### 1.4.2
 * Previews are now shown on formatted text, including greentext, bold, and italics (and any combination thereof)!
 * Moved item icons back in front of the Pokémon icons.

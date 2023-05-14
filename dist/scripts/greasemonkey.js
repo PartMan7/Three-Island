@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     Three Island
-// @version  1.4.2
+// @version  1.4.3
 // @grant    unsafeWindow
 // @author   PartMan
 // @match    http://play.pokemonshowdown.com/*
@@ -369,6 +369,7 @@ function checkMessageElement (msg, isPM) {
 		return runCodeCheck(details, isPM);
 	}
 	let nodeIndex = msg.childNodes[0]?.nodeName === 'SMALL' ? 2 : 1;
+	if (!msg.childNodes[nodeIndex]) return; // If we're inside chat formatting, the child nodes won't exist
 	if (msg.childNodes[nodeIndex].nodeName === '#text') nodeIndex++;
 	const chat = msg.childNodes[nodeIndex];
 	if (!chat) return;
@@ -419,7 +420,7 @@ const observer = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
 		for (const node of mutation.addedNodes) {
 			const roomRoom = node.id;
-			if (roomRoom) continue; // Room couldn't be loaded
+			if (!roomRoom) continue; // Room couldn't be loaded
 			if (!roomRoom.startsWith('room-')) continue;
 			const room = roomRoom.substr(5);
 			const val = validRoom(room);
