@@ -63,6 +63,7 @@ The source files for Three Island are split across `popup` (for the extension di
 ---
 * I can't install Three Island on Firefox!
 - Due to some issues with Mozilla's Add-On policies, Three Island was unlisted from the store. I've made a few attempts to get it back but have been ignored; try the Greasemonkey version instead.
+---
 * Do you plan on supporting XYZ feature?
 - If you'd like to see something added, let me know! I'll investigate and see if it's worth adding / is doable.
 ---
