@@ -95,7 +95,10 @@ For contributions, suggestions, questions, or just generic discussion, message m
 
 ### Changelog
 
-### 1.4.3
+### 1.5.0
+* Support added for crob.at.
+
+#### 1.4.3
 * Fixed a bug with pastes not being rendered on joined rooms.
 
 #### 1.4.2
