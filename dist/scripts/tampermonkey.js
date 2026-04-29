@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     Three Island
-// @version  1.4.3
+// @version  1.5.0
 // @grant    unsafeWindow
 // @author   PartMan
 // @match    http://play.pokemonshowdown.com/*
