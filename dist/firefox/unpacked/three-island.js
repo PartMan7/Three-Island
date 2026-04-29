@@ -11,7 +11,7 @@
 	WINDOW.R3I = true;
 	const { app, Dex, Storage, BattleStatNames } = WINDOW;
 	const { error, log } = WINDOW.console;
-	const storedPastes = {}; // Storing the data that we get from the Paste so we can display it
+	const generatedPasteHTML = {}; // Storing the data that we get from the Paste so we can display it
 
 	function deepClone (aObject) {
 		if (!aObject) return aObject;
@@ -188,40 +188,107 @@
 		// Gets and stores the data from Pastes that are posted
 		return new Promise((resolve, reject) => {
 			if (!url) return reject(new Error('No URL'));
-			const paste = url.match(/pokepast\.es\/([a-zA-Z0-9]+)/);
-			if (!paste) reject(new Error('Invalid paste'));
-			if (paste[1] === 'constructor') return reject(new Error('Well someone tried to screw me up'));
-			if (storedPastes[paste[1]]) return resolve(paste[1]);
-			const jsonLink = `https://pokepast.es/${paste[1]}/json`;
-			fetch(jsonLink).then(res => res.json()).then(data => {
-				const team = Storage.importTeam(data.paste);
-				const teamString = Storage.packTeam(team);
-				const pasteHTML = document.createElement('span');
-				for (let i = 0; i < team.length && i < 24; i++) pasteHTML.appendChild(monHTML(team[i])); // Access denied if we try to run Array#map
-				if (team.length > 24) pasteHTML.appendChild(document.createTextNode(`... and ${team.length - 1} more`));
-				let format = 'gen9';
-				const matched = data.notes.match(/[Ff]ormat *(?:[:-] *)?([a-z0-9]+)/);
-				if (matched) format = matched[1];
-				if (!format.startsWith('gen')) format = 'gen9' + format;
-				storedPastes[paste[1]] = { teamString, title: data.title, pasteHTML, team, format };
-				resolve(paste[1]);
-			}).catch((err) => {
-				log(`Three Island: Error in loading ${url} (this is completely safe)`, err);
-				reject(new Error('Paste link is invalid.'));
-			});
+			let pattern;
+			switch (true) {
+				case !!(pattern = url.match(/pokepast\.es\/([a-zA-Z0-9]+)/)): {
+					if (pattern[1] === 'constructor') return reject(new Error('Well someone tried to screw me up'));
+					const cacheKey = `pokepast.es:${pattern[1]}`;
+					if (generatedPasteHTML[cacheKey]) return resolve(cacheKey);
+					const jsonLink = `https://pokepast.es/${pattern[1]}/json`;
+					fetch(jsonLink).then(res => res.json()).then(data => {
+						const team = Storage.importTeam(data.paste);
+						const teamString = Storage.packTeam(team);
+						const pasteHTML = document.createElement('span');
+						for (let i = 0; i < team.length && i < 24; i++) pasteHTML.appendChild(monHTML(team[i])); // Access denied if we try to run Array#map
+						if (team.length > 24) pasteHTML.appendChild(document.createTextNode(`... and ${team.length - 1} more`));
+						let format = 'gen9';
+						const matched = data.notes.match(/[Ff]ormat *(?:[:-] *)?([a-z0-9]+)/);
+						if (matched) format = matched[1];
+						if (!format.startsWith('gen')) format = 'gen9' + format;
+						generatedPasteHTML[cacheKey] = { teamString, title: data.title, pasteHTML, team, format };
+						resolve(cacheKey);
+					}).catch((err) => {
+						log(`Three Island: Error in loading ${url} (this is completely safe)`, err);
+						reject(new Error('Paste link is invalid.'));
+					});
+					break;
+				}
+				case !!(pattern = url.match(/crob\.at\/([a-zA-Z0-9]+)/)): {
+					if (pattern[1] === 'constructor') return reject(new Error('Well someone tried to screw me up'));
+					const cacheKey = `crob.at:${pattern[1]}`;
+					if (generatedPasteHTML[cacheKey]) return resolve(cacheKey);
+					const jsonLink = `https://crob.at/api/team/${pattern[1]}`;
+					fetch(jsonLink).then(res => res.json()).then(data => {
+						const pasteHTML = document.createElement('span');
+						const teams = (data.teams || []).map(t => {
+							const team = Storage.importTeam(t.paste);
+							return {
+								team,
+								teamString: Storage.packTeam(team),
+								format: t.format || 'gen9'
+							};
+						});
+
+						const SHOWN_TEAMS = 3;
+
+						teams.forEach((team, i) => {
+							if (i < SHOWN_TEAMS) {
+								if (i > 0) pasteHTML.appendChild(document.createElement('hr'));
+								const teamDiv = document.createElement('div');
+								for (let j = 0; j < team.team.length && j < 24; j++) teamDiv.appendChild(monHTML(team.team[j]));
+								if (team.team.length > 24) teamDiv.appendChild(document.createTextNode(`... and ${team.team.length - 1} more`));
+								pasteHTML.appendChild(teamDiv);
+							}
+						});
+
+						if (teams.length > SHOWN_TEAMS) {
+							pasteHTML.appendChild(document.createElement('hr'));
+							const moreText = document.createElement('div');
+							moreText.style.textAlign = 'center';
+							moreText.style.paddingBottom = '2px';
+							moreText.innerText = `... and ${teams.length - 3} more teams`;
+							pasteHTML.appendChild(moreText);
+						}
+
+						generatedPasteHTML[cacheKey] = {
+							teamString: teams[0]?.teamString,
+							title: data.name,
+							pasteHTML,
+							team: teams[0]?.team,
+							format: teams[0]?.format,
+							teams
+						};
+						resolve(cacheKey);
+					}).catch((err) => {
+						log(`Three Island: Error in loading ${url} (this is completely safe)`, err);
+						reject(new Error('Paste link is invalid.'));
+					});
+					break;
+				}
+				default: reject(new Error('Invalid paste'));
+			}
 		});
 	}
 
 	function addTeam (data) {
 		// Store the team in the Teambuilder
-		const newTeam = new WINDOW.Object();
-		newTeam.name = data.title;
-		newTeam.format = data.format;
-		newTeam.team = data.teamString;
-		newTeam.capacity = data.team.length > 6 ? 24 : 6;
-		newTeam.folder = '';
-		newTeam.iconCache = Storage.packedTeamIcons(data.teamString);
-		Storage.teams.unshift(newTeam);
+		const teamsToAdd = data.teams || [{
+			teamString: data.teamString,
+			format: data.format,
+			team: data.team
+		}];
+
+		teamsToAdd.forEach((t, i) => {
+			const newTeam = new WINDOW.Object();
+			newTeam.name = teamsToAdd.length > 1 ? `${data.title} (${i + 1})` : data.title;
+			newTeam.format = t.format;
+			newTeam.team = t.teamString;
+			newTeam.capacity = t.team.length > 6 ? 24 : 6;
+			newTeam.folder = '';
+			newTeam.iconCache = Storage.packedTeamIcons(t.teamString);
+			Storage.teams.unshift(newTeam);
+		});
+
 		if (app.rooms.teambuilder) app.rooms.teambuilder.update();
 		Storage.saveTeams();
 	}
@@ -230,11 +297,16 @@
 		// Adds the team to the storage + teambuilder
 		return new Promise((resolve, reject) => {
 			if (!url) return reject(new Error('No URL'));
-			const paste = url.match(/pokepast\.es\/([a-zA-Z0-9]+)/);
-			if (!paste) reject(new Error('Invalid paste'));
+			let paste;
+			switch (true) {
+				case !!(paste = url.match(/(pokepast\.es)\/([a-zA-Z0-9]+)/)): break;
+				case !!(paste = url.match(/(crob\.at)\/([a-zA-Z0-9]+)/)): break;
+				default: return reject(new Error('Invalid paste'));
+			}
 			if (paste[1] === 'constructor') return reject(new Error('Well someone tried to screw me up'));
-			if (storedPastes[paste[1]]) return resolve(storedPastes[paste[1]]);
-			else return fetchPaste(url).then(data => resolve(storedPastes[data]));
+			const cacheKey = (paste[1] + ':' + paste[2]);
+			if (generatedPasteHTML[cacheKey]) return resolve(generatedPasteHTML[cacheKey]);
+			else return fetchPaste(url).then(data => resolve(generatedPasteHTML[data]));
 		}).then(data => addTeam(data)).catch(error);
 	}
 
@@ -258,10 +330,10 @@
 		if (!ftd) return;
 		if (ftd.nodeName !== 'A') return [...ftd.childNodes].forEach(node => runCheck(node, isPM));
 		// If the node isn't a link, check if any of its children are links (eg: italicized text)
-		if (/^(?:https?:\/\/)?pokepast\.es\/[a-zA-Z0-9]+$/.test(ftd.href)) {
+		if (/^(?:https?:\/\/)?(?:pokepast\.es|crob\.at)\/[a-zA-Z0-9]+$/.test(ftd.href)) {
 			const link = ftd.href;
 			fetchPaste(link).then(ref => {
-				const data = storedPastes[ref];
+				const data = generatedPasteHTML[ref];
 				const tooltip = document.createElement('span');
 				if (isPM) tooltip.classList.add('threeisland-pm');
 				const tooltipInner = document.createElement('center');

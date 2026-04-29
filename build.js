@@ -35,7 +35,8 @@ async function build () {
 			'storage',
 			'*://play.pokemonshowdown.com/*',
 			'*://*.psim.us/*',
-			'*://pokepast.es/**'
+			'*://pokepast.es/**',
+			'*://crob.at/**'
 		],
 		action: {
 			default_icon: 'icons/three-island-48.png',

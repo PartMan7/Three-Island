@@ -10,7 +10,8 @@
 		"128": "icons/three-island-128.png"
 	},
 	"permissions": [
-		"storage"
+		"storage",
+		"*://crob.at/**"
 	],
 	"action": {
 		"default_icon": "icons/three-island-48.png",
