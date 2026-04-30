@@ -703,8 +703,7 @@ function ThreeIsland () {
 	        break;
 	      }
 	      case !!(pattern = url.match(/crob\.at\/([a-zA-Z0-9]+)/)): {
-	        if (pattern[1] === 'constructor')
-	          return reject(new Error('Well someone tried to screw me up'));
+	        if (['constructor', 'api'].includes(pattern[1])) return;
 	        const cacheKey = `crob.at:${pattern[1]}`;
 	        if (generatedPasteHTML[cacheKey]) return resolve(cacheKey);
 	        const jsonLink = `https://crob.at/api/team/${pattern[1]}`;
@@ -829,15 +828,16 @@ function ThreeIsland () {
 	      default:
 	        return reject(new Error('Invalid paste'));
 	    }
-	    if (paste[1] === 'constructor')
-	      return reject(new Error('Well someone tried to screw me up'));
+	    if (['constructor', 'api'].includes(paste[2])) return;
 	    const cacheKey = paste[1] + ':' + paste[2];
 	    if (generatedPasteHTML[cacheKey])
 	      return resolve(generatedPasteHTML[cacheKey]);
 	    else
 	      return fetchPaste(url).then((data) => resolve(generatedPasteHTML[data]));
 	  })
-	    .then((data) => addTeam(data))
+	    .then((data) => {
+	      if (data) addTeam(data);
+	    })
 	    .catch(error);
 	}
 
@@ -870,6 +870,7 @@ function ThreeIsland () {
 	    const link = ftd.href;
 	    fetchPaste(link)
 	      .then((ref) => {
+			if (!ref) return;
 	        const data = generatedPasteHTML[ref];
 	        const tooltip = document.createElement('span');
 	        if (isPM) tooltip.classList.add('threeisland-pm');
@@ -903,7 +904,7 @@ function ThreeIsland () {
 	          }
 	        });
 	        button.appendChild(document.createTextNode('Import'));
-			button.style.margin = '4px';
+	        button.style.margin = '4px';
 	        tooltip.appendChild(button);
 	        ftd.classList.add('threeisland-link');
 	        if (isPM) ftd.classList.add('threeisland-pm');
@@ -1019,14 +1020,18 @@ function ThreeIsland () {
 	  return observerW;
 	}
 
-	Object.entries(IS_REWRITE_CLIENT ? PS.rooms : app.rooms).forEach(([room, data]) => {
-	  // Load all rooms on connecting
-	  const val = validRoom(room);
-	  if (!val) return;
-	  const node = IS_REWRITE_CLIENT ? document.querySelector(`#room-${room}`) : data.el;
-	  const observerR = watchRoom(node, val);
-	  ROOM_OBSERVERS[room] = { node, observerR };
-	});
+	Object.entries(IS_REWRITE_CLIENT ? PS.rooms : app.rooms).forEach(
+	  ([room, data]) => {
+	    // Load all rooms on connecting
+	    const val = validRoom(room);
+	    if (!val) return;
+	    const node = IS_REWRITE_CLIENT
+	      ? document.querySelector(`#room-${room}`)
+	      : data.el;
+	    const observerR = watchRoom(node, val);
+	    ROOM_OBSERVERS[room] = { node, observerR };
+	  },
+	);
 
 	const observer = new MutationObserver((mutations) => {
 	  // Keep an eye out for rooms we're joining / leaving
@@ -1061,7 +1066,9 @@ function ThreeIsland () {
 	  mutations.forEach((mutation) => {
 	    for (const node of mutation.addedNodes) {
 	      if (node.nodeType !== 1) continue;
-	      const user = IS_REWRITE_CLIENT ? node.getAttribute('data-roomid').replace('dm-', '') : node.getAttribute('data-userid');
+	      const user = IS_REWRITE_CLIENT
+	        ? node.getAttribute('data-roomid').replace('dm-', '')
+	        : node.getAttribute('data-userid');
 	      if (!user) continue;
 	      const observerB = new MutationObserver((mutations) => {
 	        mutations.forEach((mutation) => {
@@ -1085,7 +1092,12 @@ function ThreeIsland () {
 	    }
 	  });
 	});
-	observerPM.observe(document.querySelector(IS_REWRITE_CLIENT ? '.mainmenu-mini-windows' : '.pmbox'), { childList: true });
+	observerPM.observe(
+	  document.querySelector(
+	    IS_REWRITE_CLIENT ? '.mainmenu-mini-windows' : '.pmbox',
+	  ),
+	  { childList: true },
+	);
 
 	function addCSS(css) {
 	  // And finally we make it look pretty
