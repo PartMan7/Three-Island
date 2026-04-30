@@ -95,6 +95,9 @@ For contributions, suggestions, questions, or just generic discussion, message m
 
 ### Changelog
 
+### 1.6.0
+* Support added for the Preact client.
+
 ### 1.5.0
 * Support added for crob.at.
 
