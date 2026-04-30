@@ -64,6 +64,8 @@
 .threeisland-set {
 	position: relative;
 	display: inline-block;
+	height: 32px;
+	width: 40px;
 }
 
 .threeisland-set > .threeisland-tooltip {

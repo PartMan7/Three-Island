@@ -92,10 +92,10 @@ async function build () {
 
 	await fs.copy(path.join(__dirname, 'src', 'syringe.js'), path.join(chromePath, 'unpacked', 'syringe.js'));
 
-
 	const header = (await fs.readFile(path.join(__dirname, 'src', 'header.js'), 'utf8')).replace(/{VERSION}/g, package.version);
+	const PS_HELPERS = (await fs.readFile(path.join(__dirname, 'src', 'ps-helpers.js'), 'utf8')).split('\n').map(line => line ? `\t${line}` : line).join('\n');
 	const CSS = (await fs.readFile(path.join(__dirname, 'src', 'showdown.css'), 'utf8')).split('\n').map(line => line ? `\t${line}` : line).join('\n');
-	const ThreeIsland = (await fs.readFile(path.join(__dirname, 'src', 'three-island.js'), 'utf8')).replace(/{CSS}/g, CSS);
+	const ThreeIsland = (await fs.readFile(path.join(__dirname, 'src', 'three-island.js'), 'utf8')).replace(/'{PS_HELPERS}';/g, PS_HELPERS).replace(/{CSS}/g, CSS);
 
 	const firefoxScript = await fs.readFile(path.join(__dirname, 'src', 'firefox.js'), 'utf8');
 	const chromeScript = await fs.readFile(path.join(__dirname, 'src', 'chrome.js'), 'utf8');
