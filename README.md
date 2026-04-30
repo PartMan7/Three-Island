@@ -95,7 +95,10 @@ For contributions, suggestions, questions, or just generic discussion, message m
 
 ### Changelog
 
-### 1.6.1
+### 1.6.2
+* Fixed handling for expired/invalid `crob.at` URLs.
+
+#### 1.6.1
 * Excluded known URLs like `crob.at/api` from rendering.
 
 ### 1.6.0

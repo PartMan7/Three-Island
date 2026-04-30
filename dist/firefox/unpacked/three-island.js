@@ -712,7 +712,10 @@
 	        if (generatedPasteHTML[cacheKey]) return resolve(cacheKey);
 	        const jsonLink = `https://crob.at/api/team/${pattern[1]}`;
 	        fetch(jsonLink)
-	          .then((res) => res.json())
+	          .then((res) => {
+	            if (!res.ok) throw new Error('Paste link is invalid.');
+	            return res.json();
+	          })
 	          .then((data) => {
 	            const pasteHTML = document.createElement('span');
 	            const teams = (data.teams || []).map((t) => {
