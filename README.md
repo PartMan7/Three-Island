@@ -43,7 +43,7 @@ Three Island should now be running. If you wish to disable it, click the Tamperm
 
 **Note**: Since these last two are just scripts, they don't update themselves. If you have an older version of the script(s) and would like to update, just copy-paste the whole thing over the old code and save.
 
-**Note**: To change Three Island settings in the Greasmonkey/Tampermonkey scripts, modify the values in the OPTIONS variable.
+**Note**: To change Three Island settings in the Greasemonkey/Tampermonkey scripts, modify the values in the OPTIONS variable.
 
 ## Contributing
 The source files for Three Island are split across `popup` (for the extension display) and `src` (for the injection scripts and actual handlers). To build the extension, run `npm build` (or `node compiler.js`). Pull requests to fix bugs or introduce relevant features are appreciated, as are issues with detailed explanations.
