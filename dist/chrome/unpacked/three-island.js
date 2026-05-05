@@ -25,6 +25,10 @@ function ThreeIsland () {
 	}
 
 	// Copied from the old client
+		function toID(string) {
+		  return string.toLowerCase().replace(/[^a-z0-9]/g, '');
+		}
+
 		function packTeam(team) {
 		  var buf = '';
 		  if (!team) return '';

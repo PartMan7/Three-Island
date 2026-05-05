@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     Three Island
-// @version  1.6.3
+// @version  1.6.4
 // @grant    unsafeWindow
 // @author   PartMan
 // @match    http://play.pokemonshowdown.com/*
@@ -54,6 +54,10 @@ function deepClone(aObject) {
 }
 
 // Copied from the old client
+	function toID(string) {
+	  return string.toLowerCase().replace(/[^a-z0-9]/g, '');
+	}
+
 	function packTeam(team) {
 	  var buf = '';
 	  if (!team) return '';
