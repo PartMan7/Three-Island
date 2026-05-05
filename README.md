@@ -95,7 +95,10 @@ For contributions, suggestions, questions, or just generic discussion, message m
 
 ### Changelog
 
-### 1.6.3
+### 1.6.4
+* Provide toID function.
+
+#### 1.6.3
 * Remove jQuery from PS helpers.
 
 #### 1.6.2
