@@ -9,7 +9,7 @@
 	if (OPTIONS.enabled !== '1') return;
 
 	WINDOW.R3I = true;
-	const { app, PS, Dex, Storage, BattleStatNames } = WINDOW; // PS on rewrite client, app on original
+	const { app, PS, Dex, Storage, BattleStatNames, BattleStatIDs } = WINDOW; // PS on rewrite client, app on original
 	const { error, log } = WINDOW.console;
 	const generatedPasteHTML = {}; // Storing the data that we get from the Paste so we can display it
 
