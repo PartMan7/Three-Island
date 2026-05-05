@@ -313,12 +313,12 @@
 		    return unpackTeam(text[0]);
 		  }
 		  for (var i = 0; i < text.length; i++) {
-		    var line = $.trim(text[i]);
+		    var line = text[i].trim();
 		    if (line === '' || line === '---') {
 		      curSet = null;
 		    } else if (line.substr(0, 3) === '===' && teams) {
 		      team = [];
-		      line = $.trim(line.substr(3, line.length - 6));
+		      line = line.substr(3, line.length - 6).trim();
 		      var format = 'gen9';
 		      var capacity = 6;
 		      var bracketIndex = line.indexOf(']');
@@ -329,7 +329,7 @@
 		          format = format.slice(0, -4);
 		          capacity = 24;
 		        }
-		        line = $.trim(line.substr(bracketIndex + 1));
+		        line = line.substr(bracketIndex + 1).trim();
 		      }
 		      if (teams.length && typeof teams[teams.length - 1].team !== 'string') {
 		        teams[teams.length - 1].team = packTeam(teams[teams.length - 1].team);
@@ -417,7 +417,7 @@
 		      var evLines = line.split('/');
 		      curSet.evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 		      for (var j = 0; j < evLines.length; j++) {
-		        var evLine = $.trim(evLines[j]);
+		        var evLine = evLines[j].trim();
 		        var spaceIndex = evLine.indexOf(' ');
 		        if (spaceIndex === -1) continue;
 		        var statid = BattleStatIDs[evLine.substr(spaceIndex + 1)];
