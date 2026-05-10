@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     Three Island
-// @version  1.6.5
+// @version  1.6.6
 // @grant    unsafeWindow
 // @author   PartMan
 // @match    http://play.pokemonshowdown.com/*
@@ -36,13 +36,13 @@ if (!OPTIONS.enabled) return;
 WINDOW.R3I = true;
 const { app, PS, Dex, Storage, BattleStatNames, BattleStatIDs } = WINDOW; // PS on rewrite client, app on original
 const { error, log } = WINDOW.console;
-const generatedPasteHTML = {}; // Storing the data that we get from the Paste so we can display it
+const generatedPasteHTML = new WINDOW.Object(); // Storing the data that we get from the Paste so we can display it
 
 function deepClone(aObject) {
   if (!aObject) return aObject;
 
   let v,
-    bObject = WINDOW.Array.isArray(aObject)
+    bObject = WINDOW.Array.isArray(aObject) || Array.isArray(aObject)
       ? new WINDOW.Array()
       : new WINDOW.Object();
   for (const k in aObject) {

@@ -95,7 +95,10 @@ For contributions, suggestions, questions, or just generic discussion, message m
 
 ### Changelog
 
-### 1.6.5
+### 1.6.6
+* Fix a bug that was causing moves to not display.
+
+#### 1.6.5
 * Import BattleStatIDs from WINDOW.
 
 #### 1.6.4
