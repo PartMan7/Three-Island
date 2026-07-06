@@ -95,7 +95,10 @@ For contributions, suggestions, questions, or just generic discussion, message m
 
 ### Changelog
 
-### 1.6.7
+### 1.6.8
+* Fix thrown errors for some pastes.
+
+#### 1.6.7
 * Specify data_collection_permissions as none for Firefox.
 
 #### 1.6.6

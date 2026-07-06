@@ -26,6 +26,7 @@ function ThreeIsland () {
 
 	// Copied from the old client
 		function toID(string) {
+		  if (string == null) return '';
 		  return string.toLowerCase().replace(/[^a-z0-9]/g, '');
 		}
 

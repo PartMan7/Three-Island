@@ -47,6 +47,7 @@ opts.forEach(({ id, states, stateLabels, set, std }) => {
 		const nextState = states.includes(state) ? states[(states.indexOf(state) + 1) % states.length] : std;
 		element.setAttribute('state', nextState);
 		element.title = stateLabels[nextState];
+		console.log('donotpush', { browser, window }); // donotpush
 		browser.storage.sync.set({ [set]: nextState }).catch(console.error);
 	});
 });

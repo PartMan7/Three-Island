@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     Three Island
-// @version  1.6.7
+// @version  1.6.8
 // @grant    unsafeWindow
 // @author   PartMan
 // @match    http://play.pokemonshowdown.com/*
@@ -55,6 +55,7 @@ function deepClone(aObject) {
 
 // Copied from the old client
 	function toID(string) {
+	  if (string == null) return '';
 	  return string.toLowerCase().replace(/[^a-z0-9]/g, '');
 	}
 
