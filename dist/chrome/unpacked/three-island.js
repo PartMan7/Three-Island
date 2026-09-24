@@ -860,7 +860,7 @@ function ThreeIsland () {
 	  if (room.startsWith('room-')) room = room.substr(5);
 	  if (room === '') return '';
 	  if (room.startsWith('battle-')) return 'battle';
-	  if (['battles', 'ladder', 'rooms', 'teambuilder'].includes(room))
+	  if (['battles', 'ladder', 'rooms', 'teambuilder', 'news'].includes(room))
 	    return false; // Client special rooms
 	  if (room.includes('-') && !room.startsWith('groupchat-')) return false; // Server special rooms
 	  return true;

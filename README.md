@@ -95,7 +95,10 @@ For contributions, suggestions, questions, or just generic discussion, message m
 
 ### Changelog
 
-### 1.6.8
+### 1.6.9
+* Fix a new crash on the Preact client introduced with the new News room.
+
+#### 1.6.8
 * Fix thrown errors for some pastes.
 
 #### 1.6.7
